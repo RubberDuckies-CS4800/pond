@@ -1,6 +1,5 @@
 
 let whiteboard
-let serverConnection = new WebSocket('ws://localhost:8000/api/whiteboard')
 
 // The SVG element's coordinate space is the largest centered 16:9 rectangle
 // that can fit on the screen. This converts from mouse coordinates to SVG space
@@ -53,30 +52,19 @@ function addElement(spec) {
     addSvgElement(spec.tag, spec.attrs)
 }
 
-serverConnection.addEventListener('message', msg => {
-    addElement(JSON.parse(msg.data))
-})
-
-function addElementAndBroadcast(spec) {
-    if (serverConnection.readyState === serverConnection.OPEN) {
-        serverConnection.send(JSON.stringify(spec))
-        addElement(spec)
-    }
-}
-
-function addPathAndBroadcast(id, data) {
-    addElementAndBroadcast({
+function pathElement(id, data) {
+    return {
         tag: 'path',
         attrs: {
             id,
             d: data,
             style: 'stroke-width:0.02; stroke:white; fill:transparent;'
         }
-    })
+    }
 }
 
-function addDotAndBroadcast(id, pos) {
-    addElementAndBroadcast({
+function dotElement(id, pos) {
+    return {
         tag: 'circle',
         attrs: {
             id,
@@ -85,7 +73,7 @@ function addDotAndBroadcast(id, pos) {
             r: 0.02,
             style: 'fill:white;'
         }
-    })
+    }
 }
 
 function distance(p1, p2) {
@@ -94,59 +82,3 @@ function distance(p1, p2) {
     const dy = p1.y - p2.y
     return Math.sqrt(dx * dx + dy * dy)
 }
-
-let drawing = false
-let lastPoint = { x: 0, y: 0 }
-let wipPath = ''
-
-// Copies the text in the variable wipPath to HTML to be rendered.
-function showWipPath() {
-    document.getElementById('wipPath').setAttribute('d', wipPath)
-}
-
-function onMouseDown(event) {
-    if (drawing) return; // This can happen if you leave the window while drawing
-    drawing = true
-    lastPoint = mouseToCanvasPosition(event);
-    const { x, y } = lastPoint
-    wipPath = `M ${x} ${y}`
-    showWipPath()
-}
-
-function onMouseMove(event) {
-    if (!drawing) return
-    const mousePos = mouseToCanvasPosition(event);
-    if (distance(lastPoint, mousePos) > 0.05) {
-        lastPoint = mousePos
-        const { x, y } = lastPoint
-        wipPath += ` L ${x} ${y}`
-    }
-    showWipPath()
-}
-
-function onMouseUp(event) {
-    drawing = false
-    if (wipPath.indexOf('L') === -1) {
-        // If the user just clicked, add a dot instead of a line.
-        addDotAndBroadcast('asdf', lastPoint)
-    } else {
-        // Otherwise, draw a final line segment to where they let go of the mouse.
-        const { x, y } = mouseToCanvasPosition(event);
-        wipPath += ` L ${x} ${y}`
-        addPathAndBroadcast('asdf', wipPath)
-    }
-    wipPath = ''
-    showWipPath()
-}
-
-window.addEventListener('DOMContentLoaded', e => {
-    whiteboard = document.getElementById('whiteboard');
-    whiteboard.addEventListener('mousedown', onMouseDown);
-    whiteboard.addEventListener('mousemove', onMouseMove);
-    whiteboard.addEventListener('mouseup', onMouseUp);
-    addSvgElement('path', {
-        id: 'wipPath',
-        d: '',
-        style: 'stroke-width:0.02; stroke:white; fill:transparent;'
-    })
-})
