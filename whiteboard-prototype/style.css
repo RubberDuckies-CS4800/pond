@@ -1,0 +1,15 @@
+html {
+    background: black;
+    color: white;
+    font-family: sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#whiteboard {
+    width: 100vw;
+    height: 100vh;
+}
