@@ -17,7 +17,6 @@ app.ws('/api/whiteboard', (ws, req) => {
         // people are ever going to use it.
         for (const other of connectedClients) {
             if (other !== ws) {
-                console.log('It got sent!')
                 other.send(msg)
             }
         }
