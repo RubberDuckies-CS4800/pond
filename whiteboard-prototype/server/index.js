@@ -3,10 +3,10 @@ const express = require('express')
 const app = express()
 require('express-ws')(app)
 
-const connectedClients = [];
+let connectedClients = [];
 
 app.ws('/api/whiteboard', (ws, req) => {
-    ws.on('open', () => connectedClients.push(ws))
+    connectedClients.push(ws)
     ws.on('close', () => {
         // Remove this client from the list of clients.
         connectedClients = connectedClients.filter(c => c !== ws)
@@ -17,6 +17,7 @@ app.ws('/api/whiteboard', (ws, req) => {
         // people are ever going to use it.
         for (const other of connectedClients) {
             if (other !== ws) {
+                console.log('It got sent!')
                 other.send(msg)
             }
         }
