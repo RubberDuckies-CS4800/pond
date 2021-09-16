@@ -37,7 +37,7 @@ function onMouseUp(event) {
         // Otherwise, draw a final line segment to where they let go of the mouse.
         const { x, y } = mouseToCanvasPosition(event);
         wipPath += ` L ${x} ${y}`
-        addPathAndBroadcast(dotElement('asdf', wipPath))
+        addElementAndBroadcast(pathElement('asdf', wipPath))
     }
     wipPath = ''
     showWipPath()
