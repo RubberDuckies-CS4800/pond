@@ -39,7 +39,7 @@ function mouseToCanvasPosition(mouseEvent) {
 function addSvgElement(tag, attrs) {
     const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
     for (const k in attrs) {
-        if (k == "xlink:href") {
+        if (k == 'xlink:href') {
             el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', attrs[k]);
         } else {
             el.setAttribute(k, attrs[k]);
@@ -48,22 +48,72 @@ function addSvgElement(tag, attrs) {
     whiteboard.appendChild(el)
 }
 
+function addPath(id, data) {
+    addSvgElement('path', {
+        id,
+        d: data,
+        style: 'stroke-width:0.02; stroke:white; fill:transparent;'
+    })
+}
+
+function addDot(id, pos) {
+    addSvgElement('circle', {
+        id,
+        cx: pos.x,
+        cy: pos.y,
+        r: 0.02,
+        style: 'fill:white;'
+    })
+}
+
+function distance(p1, p2) {
+    // Pythagorean theorem
+    const dx = p1.x - p2.x
+    const dy = p1.y - p2.y
+    return Math.sqrt(dx * dx + dy * dy)
+}
+
 let drawing = false
+let lastPoint = { x: 0, y: 0 }
+let wipPath = ''
+
+// Copies the text in the variable wipPath to HTML to be rendered.
+function showWipPath() {
+    document.getElementById('wipPath').setAttribute('d', wipPath)
+}
 
 function onMouseDown(event) {
     drawing = true
-    let { x, y } = mouseToCanvasPosition(event);
-    addSvgElement('circle', { cx: x, cy: y, r: '0.1', style: "fill:white" })
+    lastPoint = mouseToCanvasPosition(event);
+    const { x, y } = lastPoint
+    wipPath = `M ${x} ${y}`
+    showWipPath()
 }
 
 function onMouseMove(event) {
     if (!drawing) return
-    let { x, y } = mouseToCanvasPosition(event);
-    addSvgElement('circle', { cx: x, cy: y, r: '0.1', style: "fill:white" })
+    const mousePos = mouseToCanvasPosition(event);
+    if (distance(lastPoint, mousePos) > 0.05) {
+        lastPoint = mousePos
+        const { x, y } = lastPoint
+        wipPath += ` L ${x} ${y}`
+    }
+    showWipPath()
 }
 
 function onMouseUp(event) {
     drawing = false
+    if (wipPath.indexOf('L') === -1) {
+        // If the user just clicked, add a dot instead of a line.
+        addDot('asdf', lastPoint)
+    } else {
+        // Otherwise, draw a final line segment to where they let go of the mouse.
+        const { x, y } = mouseToCanvasPosition(event);
+        wipPath += ` L ${x} ${y}`
+        addPath('asdf', wipPath)
+    }
+    wipPath = ''
+    showWipPath()
 }
 
 window.addEventListener('DOMContentLoaded', e => {
@@ -71,4 +121,5 @@ window.addEventListener('DOMContentLoaded', e => {
     whiteboard.addEventListener('mousedown', onMouseDown);
     whiteboard.addEventListener('mousemove', onMouseMove);
     whiteboard.addEventListener('mouseup', onMouseUp);
+    addPath('wipPath', '')
 })
