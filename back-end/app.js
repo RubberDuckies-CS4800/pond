@@ -1,3 +1,5 @@
+// To run, use "nodemon app" in the terminal
+
 const express = require("express");
 
 const app = express();
