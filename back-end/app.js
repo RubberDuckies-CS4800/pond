@@ -14,7 +14,8 @@ app.listen(8000);
 app.get("/", (req, res) => {
 
   // throws "ForbiddenError"
-  // res.sendFile("../front-end/public/index.html", { root: __dirname });
+    // res.sendFile("../front-end/public/index.html", { root: __dirname });
+  
   res.sendFile("./views/index.html", { root: __dirname });
   console.log("home page accessed");
 });
