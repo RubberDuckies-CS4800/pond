@@ -9,6 +9,7 @@ const _ = require("lodash");
 
 const app = express();
 
+
 // listen for requests
 app.listen(8000);
 
@@ -33,3 +34,14 @@ app.get("/simba", (req, res) => {
   const puppies = _.concat(names, 'appa', 4);
   console.log(puppies);
 });
+
+app.get("/pixar", (req, res) => {
+  console.log(req);
+  res.sendFile("./views/pixar.html", { root: __dirname });
+});
+
+app.get("/pixar_characters", (req, res) => {
+  console.log(req);
+  res.sendFile("./assets/characters.json", { root: __dirname });
+});
+
