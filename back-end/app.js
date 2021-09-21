@@ -3,6 +3,10 @@
 
 const express = require("express");
 
+// Lodash for A4
+const _ = require("lodash");
+
+
 const app = express();
 
 // listen for requests
@@ -23,4 +27,9 @@ app.get("/", (req, res) => {
 app.get("/simba", (req, res) => {
   res.sendFile("./views/simba.html", { root: __dirname });
   console.log("i love simba!");
+
+  // Lodash test code
+  const names = ['gus', 'x']
+  const puppies = _.concat(names, 'appa', 4);
+  console.log(puppies);
 });
