@@ -11,6 +11,16 @@ app.listen(8000);
 // app.get('/path', (req, res) => {
 // })
 
+
+app.get("/time", (req, res) => {
+  var today = new Date();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+  res.sendFile("./views/index.html", { root: __dirname });
+  console.log(time);
+});
+
+
 app.get("/", (req, res) => {
 
   // throws "ForbiddenError"
