@@ -45,3 +45,20 @@ app.get("/pixar_characters", (req, res) => {
   res.sendFile("./assets/characters.json", { root: __dirname });
 });
 
+function computeFibb(index) {
+  if (index == 1) {
+    return [1, 1]
+  } else {
+    const prev = computeFibb(index - 1)
+    return [prev[1], prev[0] + prev[1]]
+  }
+}
+
+app.get("/fibbonacci/:index", (req, res) => {
+  const idx = parseInt(req.params['index'])
+  if (isNaN(idx) || idx < 1) {
+    res.status(400).send('index must be a number >= 1')
+    return
+  }
+  res.status(200).send('' + computeFibb(idx)[1])
+})
