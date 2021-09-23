@@ -11,6 +11,17 @@ app.listen(8000);
 // app.get('/path', (req, res) => {
 // })
 
+var validator = require('validator');
+
+app.get("/emails/:email", (req, res) => {
+  res.sendFile("./assets/emails.json", { root: __dirname });
+  let email = req.params.email;
+  if(validator.isEmail(email)) {
+      console.log(email + " is a valid email.");
+  } else {
+    console.log(email + " is NOT a valid email.");
+  }
+});
 
 //display current time
 app.get("/time", (req, res) => {
