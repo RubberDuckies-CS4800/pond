@@ -2,10 +2,16 @@
 
 const express = require("express");
 
+var bodyParser = require('body-parser')
+
 const app = express();
 
 // listen for requests
 app.listen(8000);
+
+app.use(bodyParser.json())
+
+var messages = [{message: 'hello it\'s A4'}]
 
 // example layout for GET
 // app.get('/path', (req, res) => {
@@ -21,6 +27,16 @@ app.get("/emails/:email", (req, res) => {
   } else {
     console.log(email + " is NOT a valid email.");
   }
+});
+
+app.get("/a4", (req, res) => {
+  res.sendFile("./views/a4.html", { root: __dirname });
+});
+
+//A4
+app.post("/a4", (req, res) => {
+  messages.push(req.body)
+  res.sendStatus(200)
 });
 
 //display current time
