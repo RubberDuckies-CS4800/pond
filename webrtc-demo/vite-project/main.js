@@ -4,8 +4,9 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  // your config
+  // Insert credentials here
 };
+
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
