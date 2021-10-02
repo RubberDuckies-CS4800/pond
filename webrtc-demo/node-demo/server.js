@@ -27,17 +27,28 @@ app.get("/:room", (req, res) => {
   res.render("room", { roomId: req.params.room });
 });
 
+// runs anytime someone connects to our webpage
 io.on("connection", (socket) => {
+  // each is an event that is listened to
+
+  // when a user joins a room
   socket.on("join-room", (roomId, userId) => {
+
+    // join the room with the current user
+    // when something happens on the room, it will be sent the socket (or user)
     socket.join(roomId);
+
+    // send a message to everyone in the room
+    // (except yourself) that this user has connected
     socket.broadcast.to(roomId).emit("user-connected", userId);
 
+    // send a message to everyone in the room
+    // that this user has disconnected
     socket.on("disconnect", () => {
       socket.broadcast.to(roomId).emit("user-disconnected", userId);
     });
   });
 });
-
 
 // start up the server on port 3000
 server.listen(3000);
