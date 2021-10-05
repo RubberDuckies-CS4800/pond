@@ -18,10 +18,6 @@ app.use(bodyParser.json());
 
 var messages = [{ message: "hello it's A4" }];
 
-// example layout for GET
-// app.get('/path', (req, res) => {
-// })
-
 var validator = require("validator");
 
 app.get("/emails/:email", (req, res) => {
