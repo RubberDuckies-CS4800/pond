@@ -61,4 +61,12 @@ app.get("/", (req, res) => {
 app.get("/simba", (req, res) => {
   res.sendFile("./views/simba.html", { root: __dirname });
   console.log("i love simba!");
+  console.log("this is a test of nodemon");
+});
+
+app.get("/collins-test", (req, res) => {
+  console.log("my first HTTP request, fun!");
+  console.log("the request status code is: " + res.statusCode);
+
+  res.sendFile("./views/index.html", { root: __dirname });
 });
