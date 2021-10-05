@@ -69,4 +69,11 @@ app.get("/collins-test", (req, res) => {
   console.log("the request status code is: " + res.statusCode);
 
   res.sendFile("./views/index.html", { root: __dirname });
+
+  var cowsay = require("cowsay");
+  console.log(cowsay.say({
+    text : "Pond is the greatest web app ever!",
+    e : "oO",
+    T : "U "
+  }));
 });
