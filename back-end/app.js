@@ -17,32 +17,12 @@ const corsOptions = {
   origin: "http://localhost:8080",
   methods: ["GET", "POST"]
 };
-
-const io = socketIo(server, { cors: corsOptions });
-
 const corsMiddleware = cors(corsOptions);
 app.use(corsMiddleware);
 app.options('*', corsMiddleware);
 
-// example layout for GET
-// app.get('/path', (req, res) => {
-// })
-
-// Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)
-PeerServer(
-  { port: 8001 },
-  () => {
-    console.log("Peer server listening on port 8001")
-  }
-)
-
-app.use(express.static('../front-end/dist/'));
-
-// Serve additional pages in the app by returning the compiled app. Vue compiles
-// all pages to a single html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve('../front-end/dist/index.html'))
-})
+// Socketio server for real-time communication.
+const io = socketIo(server, { cors: corsOptions });
 
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId) => {
@@ -56,6 +36,27 @@ io.on("connection", (socket) => {
     });
   });
 });
+
+// Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)
+PeerServer(
+  { port: 8001 },
+  () => {
+    console.log("Peer server listening on port 8001")
+  }
+)
+
+// example layout for GET
+// app.get('/path', (req, res) => {
+// })
+
+// Serve frontend files
+app.use(express.static('../front-end/dist/'));
+
+// Serve additional pages in the app by returning the compiled app. Vue compiles
+// all pages to a single html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve('../front-end/dist/index.html'))
+})
 
 // listen for requests
 server.listen(8000);
