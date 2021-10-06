@@ -1,17 +1,19 @@
 {
-  "name": "back-end",
+  "name": "node-demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "devStart": "nodemon server.js"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "jquery": "^3.6.0",
-    "lodash": "^4.17.21",
-    "validator": "^13.6.0"
+    "nodemon": "^2.0.13",
+    "socket.io": "^4.2.0",
+    "uuid": "^8.3.2"
   }
 }
