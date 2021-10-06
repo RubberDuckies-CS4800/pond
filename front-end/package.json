@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "peerjs-client": "^0.3.15",
+    "socket.io-client": "^4.2.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {
