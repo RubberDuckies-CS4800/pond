@@ -1,73 +1,49 @@
-
 <template>
+<!-- vuetify's avatar component for nicer look and easier use -->
     <v-avatar id="avatar"
         size="90">
+        <!-- using user's initial's from reigstration -->
             MR
     </v-avatar>
 </template>
 <script>
 export default {
     mounted() {
-    //key codes
-    var keys = {};
-        keys.UP = 38;
-        keys.LEFT = 37;
-        keys.RIGHT = 39;
-        keys.DOWN = 40;
+        moveElem(document.getElementById("avatar"));
 
-    /// references to avatars's position and element
-    var avatar = {
-      x: 100,
-      y: 100,
-      speedMultiplier: 4,
-      element: document.getElementById("avatar")
-    };
+        function moveElem(draggableElem) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(draggableElem.id + "header")) {
+            document.getElementById(draggableElem.id + "header").onmousedown = dragMouseDown;
+        } else {
+            draggableElem.onmousedown = dragMouseDown;
+        }
 
-    /// key detection
-    document.body.onkeyup = 
-    document.body.onkeydown = function(e){
-      if (e.preventDefault) { 
-        e.preventDefault();
-      }
-      else {
-        e.returnValue = false; 
-      }
-      var kc = e.keyCode || e.which;
-      keys[kc] = e.type == 'keydown';
-    };
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeElem;
+            document.onmousemove = elementDrag;
+        }
 
-    /// movement update
-    var moveAvatar = function(dx, dy){
-      avatar.x += (dx||0) * avatar.speedMultiplier;
-      avatar.y += (dy||0) * avatar.speedMultiplier;
-      avatar.element.style.left = avatar.x + 'px';
-      avatar.element.style.top = avatar.y + 'px';
-    };
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            draggableElem.style.top = (draggableElem.offsetTop - pos2) + "px";
+            draggableElem.style.left = (draggableElem.offsetLeft - pos1) + "px";
+        }
 
-    /// character control
-    var detectAvatarMovement = function(){
-      if ( keys[keys.LEFT] ) {
-        moveAvatar(-1, 0);
-      }
-      if ( keys[keys.RIGHT] ) {
-        moveAvatar(1, 0);
-      }
-      if ( keys[keys.UP] ) {
-        moveAvatar(0, -1);
-      }
-      if ( keys[keys.DOWN] ) {
-        moveAvatar(0, 1);
-      }
-    };
-
-    /// update current position on screen
-    moveAvatar();
-
-    /// game loop
-    setInterval(function(){
-      detectAvatarMovement();
-    }, 1000/24);
-
+        function closeElem() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+        }
     }
 }
 </script>
