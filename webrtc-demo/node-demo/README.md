@@ -9,7 +9,7 @@ npm i -g peer
 ### Start server and automatically restarts with saved changes
 Open the terminal to node-demo
 ```
-nodemon app
+npm run devStart
 ```
 
 In another terminal
