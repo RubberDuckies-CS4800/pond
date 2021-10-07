@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <nav></nav>
     <router-view/>
   </div>
 </template>
@@ -10,8 +9,10 @@ html {
   background: linear-gradient(45deg, #172a74, #21a9af);
   background-color: #184e8e;
   font-family: "Source Sans Pro", sans-serif;
-  overflow: hidden;
   height: 100%;
+  margin: 0;
+  padding: 0;
+  background-attachment: fixed;
 }
 
 #app {
@@ -574,25 +575,6 @@ html {
     955px 304px #fff;
 }
 
-#title {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  color: #fff;
-  text-align: center;
-  font-family: "lato", sans-serif;
-  font-weight: 300;
-  font-size: 50px;
-  letter-spacing: 10px;
-  margin-top: -60px;
-  padding-left: 10px;
-}
-#title span {
-  background: -webkit-linear-gradient(white, #38495a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 @keyframes animStar {
   from {

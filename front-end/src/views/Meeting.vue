@@ -51,5 +51,11 @@ export default {
 #avatar {
     position: absolute;
     background: yellow;
+    cursor: move;
+    cursor: grab;
+}
+
+#avatar:active {
+    cursor: grabbing;
 }
 </style>
