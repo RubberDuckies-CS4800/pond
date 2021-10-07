@@ -7,7 +7,7 @@ const io = require("socket.io")(server);
 
 const { v4: uuidV4 } = require("uuid");
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 app.get("/get-room", (req, res) => {
   res.json({ roomId: uuidV4() });
