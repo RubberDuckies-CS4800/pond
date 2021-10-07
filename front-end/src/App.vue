@@ -7,16 +7,18 @@
 
 <style lang="scss">
 html {
-  background: linear-gradient(135deg, #172a74, #21a9af);
+  background: linear-gradient(45deg, #172a74, #21a9af);
   background-color: #184e8e;
   font-family: "Source Sans Pro", sans-serif;
+  overflow: hidden;
+  height: 100%;
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
 #stars {

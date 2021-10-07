@@ -17,7 +17,7 @@
             placeholder="Meeting Code"
             solo
     ></v-text-field>
-    <v-card-actions>
+    <v-card-actions class="submit">
       <v-btn
         outlined
         rounded
@@ -29,28 +29,7 @@
   </v-card>
 
   </v-container>
-  <!-- <div id="stars"></div>
-  <div id="stars2"></div>
-  <div id="stars3"></div> -->
-  <!-- <v-container fluid> -->
-    <!-- <img class="company_logo" src="https://raw.githubusercontent.com/cs480-projects/cs480-projects.github.io/master/teams-fall2021/rubber-duckies/pond-final.png" alt="Company Logo"> -->
-      <!-- <v-row align="auto">
-
-      </v-row>
-      <v-row align="auto">
-        <v-card></v-card>
-      </v-row> -->
-<!-- </v-container> -->
 </div>
-  <!-- <body>
-
-    <div id="stars"></div>
-    <div id="stars2"></div>
-    <div id="stars3"></div>
-      <div>
-          <img src="https://raw.githubusercontent.com/cs480-projects/cs480-projects.github.io/master/teams-fall2021/rubber-duckies/pond-final.png" alt="Company Logo">
-      </div>
-  </body> -->
 </template>
 
 <script>
@@ -62,9 +41,12 @@ export default {
 </script>
 <style scoped>
 
+.submit {
+  justify-content: center;
+}
 .meeting_input {
   display: inline-block;
-  width: 40%;
+  width: 15%;
 }
 
 .company_logo {
