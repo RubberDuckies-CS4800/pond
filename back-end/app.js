@@ -1,4 +1,3 @@
-// To run, use "nodemon app" in the terminal (might have to do npm install nodemon)
 // Ctrl + c to stop the app
 // To run, use "nodemon app" in the terminal
 
