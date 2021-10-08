@@ -21,7 +21,6 @@ app.get("/", (req, res) => {
     render the view "room" in public (room.ejs)
 */
 app.get("/:room", (req, res) => {
-  const num = 7;
   res.render("room", { roomId: req.params.room });
 });
 
