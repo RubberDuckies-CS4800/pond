@@ -10,43 +10,49 @@ export const state = Vue.observable({
     streams: [],
 });
 
-export const me = new Peer(undefined, {
-    host: "localhost",
-    port: "8001",
-})
 
-navigator
-    .mediaDevices
-    .getUserMedia({ 
-        audio: true, 
-        video: false
+export let me = null;
+
+export function createMe(roomId) {
+    me = new Peer(undefined, {
+        host: "localhost",
+        port: "8001",
     })
-    .then(stream => {
-        state.streams.push(stream)
 
-        console.log("Personal stream opened", state.streams)
+    me.on("open", userId => {
+        console.log("opened blah blah")
+        joinRoom(roomId, userId)
+    })
 
-        me.on("call", call => {
-            call.answer(stream);
-            call.on("stream", otherStream => {
-                state.streams.push(otherStream);
+    navigator
+        .mediaDevices
+        .getUserMedia({
+            audio: true,
+            video: true
+        })
+        .then(stream => {
+            state.streams.push(stream)
+
+            console.log("Personal stream opened", state.streams)
+
+            me.on("call", call => {
+                call.answer(stream);
+                call.on("stream", otherStream => {
+                    state.streams.push(otherStream);
+                })
+            })
+
+            onUserConnected(user => {
+                callUser(user, stream);
             })
         })
-
-        onUserConnected(user => {
-            callUser(user, stream);
-        })
-    })
+}
 
 onUserDisconnected(user => {
     console.log(user, "disconnected")
     if (state.peers[user]) {
         state.peers[user].close();
     }
-})
-
-me.on("open", id => {
-    joinRoom('dummy_room_id', id)
 })
 
 function callUser(userId, meStream) {

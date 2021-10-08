@@ -25,18 +25,19 @@
     <v-text-field
             placeholder="Meeting Code"
             solo
+            v-model="code"
     ></v-text-field>
     <v-card-actions class="submit">
       <v-btn
         outlined
         rounded
         text
-        @click="reveal = true"
+        @click="joinRoom"
       >
         Submit
       </v-btn>
     </v-card-actions>
-    <v-expand-transition>
+    <!-- <v-expand-transition>
       <v-card
         v-if="reveal"
         class="transition-fast-in-fast-out v-card--reveal"
@@ -56,7 +57,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-expand-transition>
+    </v-expand-transition> -->
   </v-card>
 
   </v-container>
@@ -65,12 +66,20 @@
 
 <script>
 // @ is an alias to /src
-
+import { createMe } from "@/backend/peers"
 export default {
-  mount() {
-    
-    
-  }
+  data() {
+    return {
+      code: null,
+    }
+  },
+  methods: {
+    joinRoom() {
+        createMe(this.code);
+        this.$router.push('/streams');
+        console.log("joined");
+    }
+  },
 
 }
 </script>

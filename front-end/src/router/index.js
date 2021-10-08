@@ -22,6 +22,11 @@ const routes = [
     path: '/meeting',
     name: 'Meeting',
     component: () => import('../views/Meeting.vue')
+  }, 
+  {
+    path: '/streams',
+    name: 'Streams',
+    component: () => import('../components/HelloWorld.vue')
   }
 ]
 
