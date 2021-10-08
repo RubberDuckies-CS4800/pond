@@ -1,3 +1,4 @@
+// Ctrl + c to stop the app
 // To run, use "nodemon app" in the terminal
 
 const cors = require('cors');
