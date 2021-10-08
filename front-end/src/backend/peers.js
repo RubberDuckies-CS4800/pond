@@ -10,7 +10,7 @@ export const state = Vue.observable({
     streams: [],
 });
 
-export const me = new Peer('asdf', {
+export const me = new Peer(undefined, {
     host: "localhost",
     port: "8001",
 })

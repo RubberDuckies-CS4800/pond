@@ -49,7 +49,8 @@ PeerServer(
 // app.get('/path', (req, res) => {
 // })
 
-// Serve frontend files
+// Serve frontend files. This is the folder that `npm build` generates when run
+// in the frontend.
 app.use(express.static('../front-end/dist/'));
 
 // Serve additional pages in the app by returning the compiled app. Vue compiles
