@@ -6,11 +6,11 @@
       >
 
       <!-- Not muted -->
-      <v-btn v-if="!muted" @click="toggleMute"
+      <v-btn  v-if="!muted" @click="toggleMute"
         ><v-icon>mdi-microphone</v-icon></v-btn
       >
       <!-- Muted -->
-      <v-btn v-else @click="toggleMute"
+      <v-btn v-else color="#8b0000" @click="toggleMute"
         ><v-icon>mdi-microphone-off</v-icon></v-btn
       >
 
