@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <v-btn-toggle v-model="toggle_multiple" dense dark multiple>
-      <v-btn @click="toggleDraw"><v-icon>mdi-pencil</v-icon></v-btn>
+      <v-btn :color="drawingOn ? '#00008b' : 'dark'" @click="toggleDraw"
+        ><v-icon>mdi-pencil</v-icon></v-btn
+      >
 
       <!-- Not muted -->
       <v-btn v-if="!muted" @click="toggleMute"

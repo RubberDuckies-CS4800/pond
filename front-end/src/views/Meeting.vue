@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
+      <v-col>
         <h1>Meeting Room</h1>
         <!-- vuetify's avatar component for nicer look and easier use -->
         <v-avatar id="avatar" size="90">
