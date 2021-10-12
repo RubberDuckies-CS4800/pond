@@ -1,6 +1,7 @@
 // Ctrl + c to stop the app
 // To run, use "nodemon app" in the terminal
 
+const { doesNotMatch } = require('assert');
 const cors = require('cors');
 const express = require("express");
 const http = require("http");
@@ -38,7 +39,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)
+//Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)
 PeerServer(
   { port: 8001 },
   () => {
@@ -63,3 +64,9 @@ app.get('*', (req, res) => {
 // listen for requests
 server.listen(8000);
 console.log("Listening on port 8000");
+
+function sum(a, b) {
+  return a + b;
+}
+
+module.exports = sum;

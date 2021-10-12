@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,8 @@
     "peer": "^0.6.1",
     "socket.io": "^4.2.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.2.5"
   }
 }
