@@ -1,5 +1,5 @@
 const request = require('supertest')
-const app = require('./app.js')
+const app = require('../app.js')
 
 describe('GET /', () => {
   describe('when the home route is accessed', () => {
