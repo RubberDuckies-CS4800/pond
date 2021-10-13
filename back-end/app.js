@@ -1,14 +1,12 @@
 // Ctrl + c to stop the app
 // To run, use "nodemon app" in the terminal
 
-const { doesNotMatch } = require('assert');
 const cors = require('cors');
 const express = require("express");
 const http = require("http");
 const path = require("path");
 const { PeerServer } = require("peer");
 const socketIo = require("socket.io");
-const { v4: uuidV4 } = require("uuid");
 
 const app = express();
 const server = http.Server(app);
@@ -26,9 +24,26 @@ app.options('*', corsMiddleware);
 // Socketio server for real-time communication.
 const io = socketIo(server, { cors: corsOptions });
 
+const whiteboards = {};
+
+function getWhiteboard(id) {
+  if (!(id in whiteboards)) {
+    whiteboards[id] = { figures: [] };
+  }
+  return whiteboards[id];
+}
+
 io.on("connection", (socket) => {
+  let currentRoom = null;
+
   socket.on("join-room", (roomId, userId) => {
+    currentRoom = roomId;
+
     socket.join(roomId);
+
+    for (const fig of getWhiteboard(roomId).figures) {
+      socket.emit('whiteboard-figure', fig)
+    }
 
     //socket.broadcast sends a message to everyone in the room
     socket.broadcast.to(roomId).emit("user-connected", userId);
@@ -37,6 +52,11 @@ io.on("connection", (socket) => {
       socket.broadcast.to(roomId).emit("user-disconnected", userId);
     });
   });
+
+  socket.on("whiteboard-figure", (fig) => {
+    getWhiteboard(currentRoom).figures.push(fig);
+    socket.broadcast.to(currentRoom).emit("whiteboard-figure", fig);
+  })
 });
 
 //Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)
@@ -64,9 +84,3 @@ app.get('*', (req, res) => {
 // listen for requests
 server.listen(8000);
 console.log("Listening on port 8000");
-
-function sum(a, b) {
-  return a + b;
-}
-
-module.exports = sum;

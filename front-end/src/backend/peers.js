@@ -17,6 +17,7 @@ async function getMedia() {
 // change. Unfortunately we can't just make the arrays directly observable
 // because of https://github.com/vuejs/vue/issues/9499
 export const state = Vue.observable({
+    roomId: null,
     streams: [],
     me: null,
 });
@@ -43,6 +44,7 @@ class Connection {
 }
 
 export function switchRoom(roomId) {
+    state.roomId = roomId;
     for (const oldConnection of Object.values(connections)) {
         oldConnection.close()
     }
