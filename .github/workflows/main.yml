@@ -1,4 +1,4 @@
-name: BuildAndMaybeDeploy
+name: Main
 
 on:
   push:
@@ -53,4 +53,27 @@ jobs:
     steps:
       - name: Test
         run: echo Hello world!
+        
+      - name: Download Result
+        uses: actions/download-artifact@v2.0.10
+        with:
+          # Artifact name
+          name: result
+          # Destination path
+          path: result.tar.gz
+      
+      - name: Extract Build Result
+        run: |
+          mkdir result/
+          cd result/
+          tar -xzf ../result.tar.gz
+        
+      - name: Deploy to EC2
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SOURCE: "./result"
+          REMOTE_HOST: "ec2-54-241-152-84.us-west-1.compute.amazonaws.com"
+          REMOTE_USER: "ec2-user"
+          TARGET: "/home/ec2-user/result"
 
