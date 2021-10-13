@@ -2,15 +2,25 @@ import Client from 'socket.io-client';
 
 const socket = new Client('localhost:8000/');
 
-export function joinRoom(roomId, selfId) {
+export function sendJoinRoom(roomId, selfId) {
     console.log("Joining room", roomId, "as", selfId)
     socket.emit('join-room', roomId, selfId)
 }
 
-export function onUserConnected(handler) {
-    socket.on('user-connected', handler);
+// This way we are guaranteed to only have one handler responding to each event,
+// preventing duplicate handling if you join a second room.
+export const handlers = {
+    onUserConnected: () => null,
+    onUserDisconnected: () => null,
 }
 
-export function onUserDisconnected(handler) {
-    socket.on('user-disconnected', handler);
+socket.on('user-connected', (...args) => handlers.onUserConnected(...args));
+socket.on('user-disconnected', (...args) => handlers.onUserDisconnected(...args));
+
+export function sendWhiteboardFigure(figure) {
+    socket.emit('whiteboard-figure', figure);
+}
+
+export function onWhiteboardFigure(handler) {
+    socket.on('whiteboard-figure', handler);
 }
