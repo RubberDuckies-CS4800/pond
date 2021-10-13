@@ -19,9 +19,9 @@
     />
     <v-container flex align="center" justify="center">
       <v-card flex class="meeting_input mx-auto px-auto" outlined>
-        <v-text-field placeholder="Meeting Code" solo></v-text-field>
+        <v-text-field placeholder="Meeting Code" v-model="code" solo></v-text-field>
         <v-card-actions class="submit">
-          <v-btn outlined rounded text @click="submit"> Submit </v-btn>
+          <v-btn outlined rounded text @click="submitCode"> Submit </v-btn>
         </v-card-actions>
         <v-expand-transition>
           <v-card
@@ -29,9 +29,9 @@
             class="transition-fast-in-fast-out v-card--reveal"
             style="height: 100%"
           >
-            <v-text-field placeholder="Name" solo></v-text-field>
+            <v-text-field placeholder="Name" solo v-model="name"></v-text-field>
             <v-card-actions class="submit">
-              <v-btn outlined rounded text> Submit </v-btn>
+              <v-btn outlined rounded text @click="joinRoom"> Submit </v-btn>
             </v-card-actions>
           </v-card>
         </v-expand-transition>
@@ -47,9 +47,14 @@ export default {
   data() {
     return {
       code: null,
+      name: null,
+      reveal: false,
     }
   },
   methods: {
+    submitCode() {
+      this.reveal = true;
+    },
     joinRoom() {
         switchRoom(this.code);
         this.$router.push('/streams');
