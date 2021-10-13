@@ -21,6 +21,6 @@ jobs:
         run: |
           cd front-end
           echo "This contains some access to git repos over non-standard ports"
-          rm package.lock
+          rm package-lock.json
           npm install
           npm build
