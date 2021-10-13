@@ -15,6 +15,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      
+      - name: npm i backend
+        run: |
+          cd back-end
+          rm package-lock.json
+          npm install
 
       # Runs a set of commands using the runners shell
       - name: Build frontend
@@ -24,3 +30,18 @@ jobs:
           rm package-lock.json
           npm install
           npm build
+      
+      - name: Package result
+        run: |
+          mkdir result/
+          mkdir result/front-end/
+          cp -r front-end/dist result/front-end/dist
+          cp -r back-end result/back-end
+          cd result/
+          tar -czf result.tar.gz *
+      
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: result
+          path: result/result.tar.gz
