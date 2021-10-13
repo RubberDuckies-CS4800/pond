@@ -36,13 +36,11 @@ jobs:
           mkdir result/front-end/
           cp -r front-end/dist result/front-end/dist
           cp -r back-end result/back-end
-          cd result/
-          tar -czf result.tar.gz *
 
       - uses: actions/upload-artifact@v2
         with:
           name: result
-          path: result/result.tar.gz
+          path: result/
  
   deploy:
     needs: build
@@ -61,13 +59,7 @@ jobs:
           # Artifact name
           name: result
           # Destination path
-          path: result.tar.gz
-      
-      - name: Extract Build Result
-        run: |
-          mkdir result/
-          cd result/
-          tar -xzf ../result.tar.gz
+          path: result/
         
       - name: Deploy to EC2
         uses: easingthemes/ssh-deploy@v2.1.5
