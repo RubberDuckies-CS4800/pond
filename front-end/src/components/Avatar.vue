@@ -16,8 +16,10 @@ export default {
       return this.name
         .split(' ')
         .map(x => x.charAt(0))
-        .join('')
+        .slice(0, 2)
+        .join('. ')
         .toUpperCase()
+        + '.';
     }
   },
   mounted() {
