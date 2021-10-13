@@ -19,7 +19,6 @@ jobs:
       - name: npm i backend
         run: |
           cd back-end
-          rm package-lock.json
           npm install
 
       # Runs a set of commands using the runners shell
