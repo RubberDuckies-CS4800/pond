@@ -17,6 +17,10 @@ export const handlers = {
 socket.on('user-connected', (...args) => handlers.onUserConnected(...args));
 socket.on('user-disconnected', (...args) => handlers.onUserDisconnected(...args));
 
+export function sendWhiteboardFigure(figure) {
+    socket.emit('whiteboard-figure', figure);
+}
+
 export function onWhiteboardFigure(handler) {
     socket.on('whiteboard-figure', handler);
 }

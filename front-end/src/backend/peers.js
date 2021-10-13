@@ -44,11 +44,11 @@ class Connection {
 }
 
 export function switchRoom(roomId) {
-    state.roomId = roomId;
     for (const oldConnection of Object.values(connections)) {
         oldConnection.close()
     }
     connections = {};
+    state.roomId = roomId;
     state.streams = [];
     state.me = new Peer(undefined, {
         host: "localhost",
@@ -77,8 +77,7 @@ export function switchRoom(roomId) {
 
     /// On incoming connection...
     state.me.on("call", async call => {
-        call.answer(await myStream)
-        console.log(call);
         connections[call.peer] = new Connection(call);
+        call.answer(await myStream);
     });
 }
