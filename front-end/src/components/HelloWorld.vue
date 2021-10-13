@@ -20,7 +20,6 @@ export default {
   },
   computed: {
     streams() {
-      console.log(state.streams);
       return state.streams;
     },
   },

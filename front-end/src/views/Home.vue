@@ -66,7 +66,7 @@
 
 <script>
 // @ is an alias to /src
-import { createMe } from "@/backend/peers"
+import { switchRoom } from "@/backend/peers"
 export default {
   data() {
     return {
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     joinRoom() {
-        createMe(this.code);
+        switchRoom(this.code);
         this.$router.push('/streams');
         console.log("joined");
     }
