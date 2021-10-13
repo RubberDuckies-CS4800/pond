@@ -20,6 +20,7 @@ export const state = Vue.observable({
     roomId: null,
     streams: [],
     me: null,
+    myName: null,
 });
 
 let connections = {};
@@ -43,12 +44,13 @@ class Connection {
     }
 }
 
-export function switchRoom(roomId) {
+export function switchRoom(roomId, name) {
     for (const oldConnection of Object.values(connections)) {
         oldConnection.close()
     }
     connections = {};
     state.roomId = roomId;
+    state.myName = name;
     state.streams = [];
     state.me = new Peer(undefined, {
         host: "localhost",

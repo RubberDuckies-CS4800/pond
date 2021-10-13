@@ -56,8 +56,8 @@ export default {
       this.reveal = true;
     },
     joinRoom() {
-        switchRoom(this.code);
-        this.$router.push('/streams');
+        switchRoom(this.code, this.name);
+        this.$router.push('/meeting');
         console.log("joined");
     }
   },

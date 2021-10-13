@@ -2,12 +2,24 @@
   <!-- vuetify's avatar component for nicer look and easier use -->
   <v-avatar id="avatar" size="90">
     <!-- using user's initial's from reigstration -->
-    MR
+    {{ initials }}
   </v-avatar>
 </template>
 
 <script>
 export default {
+  props: {
+    name: String
+  },
+  computed: {
+    initials() {
+      return this.name
+        .split(' ')
+        .map(x => x.charAt(0))
+        .join('')
+        .toUpperCase()
+    }
+  },
   mounted() {
     moveElem(document.getElementById("avatar"));
 
@@ -55,7 +67,7 @@ export default {
 <style scoped>
 #avatar {
   position: absolute;
-  background: yellow;
+  background: rgb(20, 145, 202);
   cursor: move;
   cursor: grab;
 }
