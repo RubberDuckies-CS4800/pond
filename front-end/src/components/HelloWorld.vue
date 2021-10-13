@@ -26,5 +26,10 @@ export default {
       return state.streams;
     },
   },
+  mounted () {
+    if (state.roomId === null) {
+      this.$router.push('/')
+    }
+  }
 };
 </script>

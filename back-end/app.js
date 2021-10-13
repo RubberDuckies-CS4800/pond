@@ -27,7 +27,10 @@ app.options('*', corsMiddleware);
 const io = socketIo(server, { cors: corsOptions });
 
 io.on("connection", (socket) => {
+  let currentRoom = null;
   socket.on("join-room", (roomId, userId) => {
+    currentRoom = roomId;
+
     socket.join(roomId);
 
     //socket.broadcast sends a message to everyone in the room
@@ -37,6 +40,10 @@ io.on("connection", (socket) => {
       socket.broadcast.to(roomId).emit("user-disconnected", userId);
     });
   });
+
+  socket.on("whiteboard-figure", (fig) => {
+    socket.broadcast.to(currentRoom).emit("whiteboard-figure", fig);
+  })
 });
 
 //Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)

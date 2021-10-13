@@ -6,6 +6,7 @@ import { joinRoom, onUserConnected, onUserDisconnected } from './socket';
 // change. Unfortunately we can't just make the arrays directly observable
 // because of https://github.com/vuejs/vue/issues/9499
 export const state = Vue.observable({
+    roomId: null,
     peers: [],
     streams: [],
 });
@@ -14,6 +15,8 @@ export const state = Vue.observable({
 export let me = null;
 
 export function createMe(roomId) {
+    state.roomId = roomId;
+
     me = new Peer(undefined, {
         host: "localhost",
         port: "8001",
