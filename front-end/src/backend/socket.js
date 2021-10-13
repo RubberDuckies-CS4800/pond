@@ -14,3 +14,11 @@ export function onUserConnected(handler) {
 export function onUserDisconnected(handler) {
     socket.on('user-disconnected', handler);
 }
+
+export function sendWhiteboardFigure(figure) {
+    socket.emit('whiteboard-figure', figure);
+}
+
+export function onWhiteboardFigure(handler) {
+    socket.on('whiteboard-figure', handler);
+}

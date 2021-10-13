@@ -1,23 +1,35 @@
 <template>
   <div>
-    <svg 
-        viewBox="0 0 16 9" 
-        id="whiteboard" 
-        ref="whiteboard"
-        @mousedown="onMouseDown"
-        @mousemove="onMouseMove"
-        @mouseup="onMouseUp"
+    <svg
+      viewBox="0 0 16 9"
+      id="whiteboard"
+      ref="whiteboard"
+      @mousedown="onMouseDown"
+      @mousemove="onMouseMove"
+      @mouseup="onMouseUp"
     >
       <!-- <rect width="16" height="9" style="stroke: red; stroke-width: 0.01" /> -->
-      <path id="wipPath" />
+      <WhiteboardFigure
+        type="path"
+        :attributes="{ style: lineStyle, d: wipPath }"
+      />
+      <WhiteboardFigure
+        v-for="figure in figures"
+        :key="figure.id"
+        :type="figure.type"
+        :attributes="figure.attributes"
+      />
     </svg>
   </div>
 </template>
 
 <script>
 import { state } from "@/backend/peers";
+import WhiteboardFigure from "./WhiteboardFigure.vue";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
+  components: { WhiteboardFigure },
   name: "Whiteboard",
   computed: {
     streams() {
@@ -28,7 +40,10 @@ export default {
     return {
       drawingNow: false,
       lastPoint: { x: 0, y: 0 },
+      figures: [],
       wipPath: "",
+      lineStyle: "stroke-width:0.02; stroke:white; fill:transparent;",
+      fillStyle: "fill:white;",
     };
   },
   methods: {
@@ -66,42 +81,31 @@ export default {
       };
     },
 
-    // https://stackoverflow.com/questions/6701705/programmatically-creating-an-svg-image-element-with-javascript
-    addSvgElement(tag, attrs) {
-      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-      for (const k in attrs) {
-        if (k == "xlink:href") {
-          el.setAttributeNS("http://www.w3.org/1999/xlink", "href", attrs[k]);
-        } else {
-          el.setAttribute(k, attrs[k]);
-        }
-      }
-      this.$refs.whiteboard.appendChild(el);
-    },
-
     addElement(spec) {
-      this.addSvgElement(spec.tag, spec.attrs);
+      this.figures.push({
+        id: uuidv4(),
+        type: spec.tag,
+        attributes: spec.attrs,
+      });
     },
 
-    pathElement(id, data) {
+    pathElement(data) {
       return {
         tag: "path",
         attrs: {
-          id,
           d: data,
           style: "stroke-width:0.02; stroke:white; fill:transparent;",
         },
       };
     },
 
-    dotElement(id, pos) {
+    dotElement(pos) {
       return {
         tag: "circle",
         attrs: {
-          id,
           cx: pos.x,
           cy: pos.y,
-          r: 0.02,
+          r: 0.05,
           style: "fill:white;",
         },
       };
@@ -114,18 +118,12 @@ export default {
       return Math.sqrt(dx * dx + dy * dy);
     },
 
-    // Copies the text in the variable wipPath to HTML to be rendered.
-    showWipPath() {
-      document.getElementById("wipPath").setAttribute("d", this.wipPath);
-    },
-
     onMouseDown(event) {
       if (this.drawingNow) return; // This can happen if you leave the window while drawing
       this.drawingNow = true;
       this.lastPoint = this.mouseToCanvasPosition(event);
       const { x, y } = this.lastPoint;
       this.wipPath = `M ${x} ${y}`;
-      this.showWipPath();
     },
 
     onMouseMove(event) {
@@ -136,22 +134,20 @@ export default {
         const { x, y } = this.lastPoint;
         this.wipPath += ` L ${x} ${y}`;
       }
-      this.showWipPath();
     },
 
     onMouseUp(event) {
       this.drawingNow = false;
       if (this.wipPath.indexOf("L") === -1) {
         // If the user just clicked, add a dot instead of a line.
-        this.addElement(this.dotElement("asdf", this.lastPoint));
+        this.addElement(this.dotElement(this.lastPoint));
       } else {
         // Otherwise, draw a final line segment to where they let go of the mouse.
         const { x, y } = this.mouseToCanvasPosition(event);
         this.wipPath += ` L ${x} ${y}`;
-        this.addElement(this.pathElement("asdf", this.wipPath));
+        this.addElement(this.pathElement(this.wipPath));
       }
       this.wipPath = "";
-      this.showWipPath();
     },
   },
 };
