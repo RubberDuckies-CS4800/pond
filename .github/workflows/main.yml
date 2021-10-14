@@ -69,4 +69,4 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
         
       - name: Deploy to EC2
-        run: rsync ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result --rsh "ssh -o StrictHostKeyChecking=no" --recursive -rltgoDzvO
+        run: rsync ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result --recursive
