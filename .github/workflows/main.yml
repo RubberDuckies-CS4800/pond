@@ -61,12 +61,11 @@ jobs:
           # Destination path
           path: result/
         
-      - name: Deploy to EC2
-        uses: garygrossgarten/github-action-scp@release
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
         with:
-          local: "./result"
-          remote: "/home/ec2-user/result"
-          host: "ec2-54-241-152-84.us-west-1.compute.amazonaws.com"
-          username: "ec2-user"
-          privateKey: ${{ secrets.EC2_SSH_KEY }}
-
+          key: ${{ secrets.EC2_SSH_KEY }}
+          name: id_rsa
+        
+      - name: Deploy to EC2
+        run: rsync ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result --rsh "ssh -o StrictHostKeyChecking=no" --recursive -rltgoDzvO
