@@ -36,11 +36,12 @@ jobs:
           mkdir result/front-end/
           cp -r front-end/dist result/front-end/dist
           cp -r back-end result/back-end
+          tar -czf result.tar.gz result
 
       - uses: actions/upload-artifact@v2
         with:
           name: result
-          path: result/
+          path: result.tar.gz
  
   deploy:
     needs: build
@@ -59,7 +60,10 @@ jobs:
           # Artifact name
           name: result
           # Destination path
-          path: result/
+          path: result.tar.gz
+      
+      - name: Extract result
+        run: tar -xzf result.tar.gz
         
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
@@ -67,9 +71,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-          
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
         
       - name: Deploy to EC2
-        run: rsync ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result --recursive
+        run: rsync ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:. --recursive
