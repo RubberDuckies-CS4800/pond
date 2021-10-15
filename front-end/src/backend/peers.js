@@ -53,7 +53,6 @@ export function switchRoom(roomId, name) {
     state.myName = name;
     state.streams = [];
     let host = window.location.hostname;
-    console.log(host);
     state.me = new Peer(undefined, {
         host: host,
         port: "8001",
