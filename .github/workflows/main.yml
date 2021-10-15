@@ -72,4 +72,4 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         
       - name: Deploy to EC2
-        run: scp -r ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result
+        run: rsync ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result --recursive
