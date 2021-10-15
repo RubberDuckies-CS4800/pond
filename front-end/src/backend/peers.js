@@ -52,8 +52,9 @@ export function switchRoom(roomId, name) {
     state.roomId = roomId;
     state.myName = name;
     state.streams = [];
+    let host = window.location.host;
     state.me = new Peer(undefined, {
-        host: "localhost",
+        host: host,
         port: "8001",
     })
     const myStream = getMedia();

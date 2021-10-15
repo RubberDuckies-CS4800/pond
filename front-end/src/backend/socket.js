@@ -1,6 +1,7 @@
 import Client from 'socket.io-client';
 
-const socket = new Client('localhost:8000/');
+let host = window.location.host + ":8000/";
+const socket = new Client(host);
 
 export function sendJoinRoom(roomId, selfId) {
     console.log("Joining room", roomId, "as", selfId)
