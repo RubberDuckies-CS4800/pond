@@ -60,7 +60,7 @@ jobs:
           # Artifact name
           name: result
           # Destination path
-          path: result.tar.gz
+          path: ./
       
       - name: Extract result
         run: tar -xzf result.tar.gz
