@@ -41,3 +41,32 @@ jobs:
         with:
           name: result
           path: result/
+ 
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Test
+        run: echo Hello world!
+        
+      - name: Download Result
+        uses: actions/download-artifact@v2.0.10
+        with:
+          # Artifact name
+          name: result
+          # Destination path
+          path: result/
+        
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+        
+      - name: Deploy to EC2
+        run: scp -r ./result ec2-user@ec2-54-241-152-84.us-west-1.compute.amazonaws.com:/home/ec2-user/result
