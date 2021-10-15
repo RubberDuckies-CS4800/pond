@@ -19,7 +19,7 @@
     />
     <v-container flex align="center" justify="center">
       <v-card flex class="meeting_input mx-auto px-auto" outlined>
-        <v-text-field placeholder="Meeting Code" v-model="code" solo></v-text-field>
+        <v-text-field placeholder="Enter Meeting Code" v-model="code" solo></v-text-field>
         <v-card-actions class="submit">
           <v-btn outlined rounded text @click="submitCode"> Submit </v-btn>
         </v-card-actions>
