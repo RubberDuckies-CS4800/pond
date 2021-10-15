@@ -6,7 +6,7 @@
       >
 
       <!-- Not muted -->
-      <v-btn  v-if="!muted" @click="toggleMute"
+      <v-btn v-if="!muted" @click="toggleMute"
         ><v-icon>mdi-microphone</v-icon></v-btn
       >
       <!-- Muted -->
@@ -38,6 +38,7 @@ export default {
       muted: false,
       cameraOn: false,
       drawingOn: false,
+      toggle_multiple: [],
     };
   },
   methods: {
