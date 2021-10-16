@@ -55,7 +55,10 @@ export function switchRoom(roomId, name) {
     let host = window.location.hostname;
     state.me = new Peer(undefined, {
         host: host,
-        port: "8001",
+        port: {
+            "http:": "8001",
+            "https:": "4431",
+        }[window.location.protocol]
     })
     const myStream = getMedia();
     myStream.then(stream => state.streams.push(stream));
