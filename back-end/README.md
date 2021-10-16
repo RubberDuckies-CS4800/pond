@@ -7,7 +7,7 @@ npm install
 
 ### Start server and automatically restarts with saved changes
 ```
-nodemon app
+nodemon server
 ```
 
 ### Stop nodemon

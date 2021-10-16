@@ -13,15 +13,18 @@ const { v4: uuidV4 } = require('uuid')
 const app = express()
 const server = http.Server(app)
 
-// Setup CORS so that the frontend served on :8080 can access things on the
-// server at :8000.
-const corsOptions = {
-  origin: 'http://localhost:8080',
-  methods: ['GET', 'POST'],
-}
-const corsMiddleware = cors(corsOptions)
-app.use(corsMiddleware)
-app.options('*', corsMiddleware)
+// // Setup CORS so that the frontend served on :8080 can access things on the
+// // server at :8000.
+// const corsOptions = {
+//   origin: 'http://localhost:8080',
+//   methods: ['GET', 'POST'],
+// }
+// const corsMiddleware = cors(corsOptions)
+// app.use(corsMiddleware)
+// app.options('*', corsMiddleware)
+
+// temporary solution to allow all CORS requests
+app.use(cors())
 
 // Socketio server for real-time communication.
 const io = socketIo(server, { cors: corsOptions })
