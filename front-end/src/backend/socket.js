@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-let host = `${window.location.protocol}//${window.location.hostname}:8000`
+let host = `${window.location.protocol}//${window.location.host}`
 const socket = io(host)
 
 socket.on('connect_error', (err) => {
