@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 
-let host = `${window.location.protocol}//${window.location.hostname}:8000`
+// let host = `${window.location.protocol}//${window.location.hostname}:8000`
+let host = `http://${window.location.hostname}:8000`
 const socket = io(host)
 
 socket.on('connect_error', (err) => {
@@ -32,12 +33,11 @@ export function onWhiteboardFigure(handler) {
   socket.on('whiteboard-figure', handler)
 }
 
-
 // Extra client-side socket connection events
 socket.on('connect', () => {
-  console.log(socket.connected) // true
+  console.log(`Socket Connected: ${socket.connected}`) // true
 })
 
 socket.on('disconnect', () => {
-  console.log(socket.connected) // false
+  console.log(`Socket Connected: ${socket.connected}`) // false
 })
