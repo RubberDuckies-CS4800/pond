@@ -27,7 +27,7 @@ const server = http.Server(app)
 app.use(cors())
 
 // Socketio server for real-time communication.
-const io = socketIo(server, { cors: corsOptions })
+const io = socketIo(server)
 
 const whiteboards = {};
 
@@ -40,7 +40,6 @@ function getWhiteboard(id) {
 
 io.on("connection", (socket) => {
   let currentRoom = null;
-
   socket.on("join-room", (roomId, userId) => {
     currentRoom = roomId;
 
@@ -63,10 +62,6 @@ io.on("connection", (socket) => {
     socket.broadcast.to(currentRoom).emit("whiteboard-figure", fig);
   })
 });
-
-// example layout for GET
-// app.get('/path', (req, res) => {
-// })
 
 // Serve frontend files. This is the folder that `npm build` generates when run
 // in the frontend.
