@@ -34,10 +34,10 @@ export function onWhiteboardFigure(handler) {
 
 
 // Extra client-side socket connection events
-// socket.on('connect', () => {
-//   console.log(socket.connected) // true
-// })
+socket.on('connect', () => {
+  console.log(socket.connected) // true
+})
 
-// socket.on('disconnect', () => {
-//   console.log(socket.connected) // false
-// })
+socket.on('disconnect', () => {
+  console.log(socket.connected) // false
+})
