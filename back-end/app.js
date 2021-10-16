@@ -42,7 +42,6 @@ io.on("connection", (socket) => {
   console.log("connection!!!")
   socket.on("join-room", (roomId, userId) => {
     currentRoom = roomId;
-    console.log("still need this to work")
     socket.join(roomId);
 
     for (const fig of getWhiteboard(roomId).figures) {
