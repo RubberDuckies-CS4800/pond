@@ -9,7 +9,7 @@ export default {
     stream: MediaStream
   },
   mounted() {
-    console.log(this.$refs.video);
+    // console.log(this.$refs.video);
     const vid = this.$refs.video;
     vid.srcObject = this.stream;
     vid.addEventListener("loadedmetadata", () => {

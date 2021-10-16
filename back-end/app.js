@@ -2,16 +2,16 @@
 // To run, use "nodemon app" in the terminal
 
 const cors = require('cors')
-const express = require('express')
-const http = require('http')
 const path = require('path')
-const socketIo = require('socket.io')
 const { v4: uuidV4 } = require('uuid')
 
-
-
+const express = require('express')
 const app = express()
+const http = require('http')
 const server = http.Server(app)
+const socketIo = require('socket.io')
+// Socketio server for real-time communication.
+const io = socketIo(server, { cors: { origin: '*' } })
 
 // // Setup CORS so that the frontend served on :8080 can access things on the
 // // server at :8000.
@@ -23,11 +23,10 @@ const server = http.Server(app)
 // app.use(corsMiddleware)
 // app.options('*', corsMiddleware)
 
-// temporary solution to allow all CORS requests
-app.use(cors())
+// // temporary solution to allow all CORS requests
+// app.use(cors())
 
-// Socketio server for real-time communication.
-const io = socketIo(server)
+
 
 const whiteboards = {};
 
@@ -40,9 +39,10 @@ function getWhiteboard(id) {
 
 io.on("connection", (socket) => {
   let currentRoom = null;
+  console.log("connection!!!")
   socket.on("join-room", (roomId, userId) => {
     currentRoom = roomId;
-
+    console.log("still need this to work")
     socket.join(roomId);
 
     for (const fig of getWhiteboard(roomId).figures) {
@@ -74,4 +74,4 @@ app.get('*', (req, res) => {
   // res.sendFile(path.resolve('../front-end/dist/index.html'))
 })
 
-module.exports = app
+module.exports = server
