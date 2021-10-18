@@ -69,8 +69,7 @@ app.use(express.static('../front-end/dist/'))
 // Serve additional pages in the app by returning the compiled app. Vue compiles
 // all pages to a single html file.
 app.get('*', (req, res) => {
-  res.send('hello world')
-  // res.sendFile(path.resolve('../front-end/dist/index.html'))
+  res.sendFile(path.resolve('../front-end/dist/index.html'))
 })
 
 module.exports = server
