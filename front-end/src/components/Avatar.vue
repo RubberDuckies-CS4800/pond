@@ -1,31 +1,78 @@
 <template>
-  <!-- vuetify's avatar component for nicer look and easier use -->
-  <v-avatar id="avatar" size="90">
-    <!-- using user's initial's from reigstration -->
-    {{ initials }}
-  </v-avatar>
+  <div>
+    <!-- vuetify's avatar component for nicer look and easier use -->
+    <v-avatar id="current_user" size="90">
+      <!-- using user's initial's from reigstration -->
+      {{ initials }}
+    </v-avatar>
+    <!-- <v-avatar v-for="avatar in avatars" :key="avatar.id"></v-avatar> -->
+    <h3>stuff</h3>
+    <h3>{{ avatars }}</h3>
+    <h3 v-for="avatar in avatars" :key="avatar.id">
+      id: {{ avatar.id }}, top: {{ avatar.top }}, left: {{ avatar.left }}
+    </h3>
+  </div>
 </template>
 
 <script>
+import {
+  sendAvatar,
+  onAvatar,
+  removeAvatar,
+  onRemoveAvatar,
+} from "@/backend/socket";
+import { v4 as uuidv4 } from "uuid";
 export default {
   props: {
-    name: String
+    name: String,
+    roomId: String,
   },
   computed: {
     initials() {
-      return this.name
-        .split(' ')
-        .map(x => x.charAt(0))
-        .slice(0, 2)
-        .join('. ')
-        .toUpperCase()
-        + '.';
-    }
+      return (
+        this.name
+          .split(" ")
+          .map((x) => x.charAt(0))
+          .slice(0, 2)
+          .join(". ")
+          .toUpperCase() + "."
+      );
+    },
+  },
+  data() {
+    return {
+      avatars: {},
+      id: null,
+    };
   },
   mounted() {
-    moveElem(document.getElementById("avatar"));
+    this.id = uuidv4();
+    let current_user_avatar = {
+      id: this.id,
+      roomId: this.roomId,
+      top: 0,
+      left: 0,
+    };
+    sendAvatar(current_user_avatar);
+    onAvatar((avatar) => {
+      if (avatar.id) {
+        if (this.id != avatar.id) {
+          this.avatars[avatar.id] = {
+            id: avatar.id,
+            roomId: avatar.roomId,
+            top: avatar.top,
+            left: avatar.left,
+          };
+        }
+      }
+      console.log(JSON.stringify(this.avatars));
+    });
+    onRemoveAvatar((avatar) => {
+      this.avatars.delete(avatar.id);
+    });
 
-    function moveElem(draggableElem) {
+    moveElem(document.getElementById("current_user"), this.id, this.roomId);
+    function moveElem(draggableElem, avatarId, roomId) {
       var pos1 = 0,
         pos2 = 0,
         pos3 = 0,
@@ -55,6 +102,14 @@ export default {
         pos4 = e.clientY;
         draggableElem.style.top = draggableElem.offsetTop - pos2 + "px";
         draggableElem.style.left = draggableElem.offsetLeft - pos1 + "px";
+        let current_user_avatar = {
+          id: avatarId,
+          roomId: roomId,
+          top: draggableElem.style.top,
+          left: draggableElem.style.left,
+        };
+        sendAvatar(current_user_avatar);
+        // console.log("moved");
       }
 
       function closeElem() {
@@ -63,18 +118,30 @@ export default {
       }
     }
   },
+  unmounted() {
+    const current_user_avatar = {
+      id: this.id,
+      roomId: this.roomId,
+    };
+    removeAvatar(current_user_avatar);
+  },
 };
 </script>
 
 <style scoped>
-#avatar {
+#other_users {
+  position: absolute;
+  background: rgb(20, 145, 202);
+}
+
+#current_user {
   position: absolute;
   background: rgb(20, 145, 202);
   cursor: move;
   cursor: grab;
 }
 
-#avatar:active {
+#current_user:active {
   cursor: grabbing;
 }
 </style>

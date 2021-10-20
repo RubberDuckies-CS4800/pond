@@ -3,25 +3,25 @@
     <h1>Meeting Room</h1>
     <p>There are {{ streams.length }} streams</p>
     <Whiteboard />
-    <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" />
-    <Avatar :name="myName" /> 
-    <UserControls />
+    <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
+    <Avatar :name="myName" :roomId="roomId"/> 
+    <!-- <UserControls /> -->
   </div>
 </template>
 
 <script>
 import { state } from "@/backend/peers";
-import VideoStream from "@/components/VideoStream";
+// import VideoStream from "@/components/VideoStream";
 import Whiteboard from "../components/Whiteboard.vue";
 import Avatar from '../components/Avatar.vue';
-import UserControls from '../components/UserControls.vue';
+// import UserControls from '../components/UserControls.vue';
 
 export default {
   components: {
-    VideoStream,
+    // VideoStream,
     Whiteboard,
     Avatar,
-    UserControls,
+    // UserControls,
   },
   name: "Meeting",
   props: {
@@ -33,6 +33,9 @@ export default {
     },
     myName() {
       return state.myName;
+    },
+    roomId() {
+      return state.roomId
     }
   },
   mounted() {
