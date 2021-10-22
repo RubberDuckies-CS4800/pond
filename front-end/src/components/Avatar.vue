@@ -6,9 +6,14 @@
       {{ initials }}
     </v-avatar>
     <!-- <v-avatar v-for="avatar in avatars" :key="avatar.id"></v-avatar> -->
-    <h3>stuff</h3>
-    <h3>{{ avatars }}</h3>
+    <!-- <h3>stuff</h3> -->
+    <!-- <h3>{{ avatars }}</h3>
+    <p></p> -->
     <h3 v-for="avatar in avatars" :key="avatar.id">
+      <v-avatar
+        :id="avatar.id"
+        :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}; left:${avatar.left};`"
+      ></v-avatar>
       id: {{ avatar.id }}, top: {{ avatar.top }}, left: {{ avatar.left }}
     </h3>
   </div>
@@ -22,6 +27,7 @@ import {
   onRemoveAvatar,
 } from "@/backend/socket";
 import { v4 as uuidv4 } from "uuid";
+
 export default {
   props: {
     name: String,
@@ -57,18 +63,19 @@ export default {
     onAvatar((avatar) => {
       if (avatar.id) {
         if (this.id != avatar.id) {
-          this.avatars[avatar.id] = {
+          this.$set(this.avatars, avatar.id, {
             id: avatar.id,
             roomId: avatar.roomId,
             top: avatar.top,
             left: avatar.left,
-          };
+          });
         }
       }
-      console.log(JSON.stringify(this.avatars));
+      // console.log(JSON.stringify(this.avatars));
     });
     onRemoveAvatar((avatar) => {
-      this.avatars.delete(avatar.id);
+      console.log("remove avatar")
+      this.$delete(this.avatars, avatar.id)
     });
 
     moveElem(document.getElementById("current_user"), this.id, this.roomId);
@@ -109,7 +116,6 @@ export default {
           left: draggableElem.style.left,
         };
         sendAvatar(current_user_avatar);
-        // console.log("moved");
       }
 
       function closeElem() {
@@ -118,7 +124,7 @@ export default {
       }
     }
   },
-  unmounted() {
+  beforeUnmount() {
     const current_user_avatar = {
       id: this.id,
       roomId: this.roomId,
@@ -129,9 +135,9 @@ export default {
 </script>
 
 <style scoped>
-#other_users {
+.v-avatar {
   position: absolute;
-  background: rgb(20, 145, 202);
+  background: rgb(17, 204, 157);
 }
 
 #current_user {

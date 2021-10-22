@@ -51,7 +51,7 @@ function addAvatar(avatar, roomId, top, left) {
 		left: left,
 	}
 	// }
-	console.log(Object.keys(room_avatars).length)
+	// console.log(Object.keys(room_avatars).length)
 }
 
 function deleteAvatar(avatar, roomId) {
@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
 		currentRoom = roomId
 
 		socket.join(roomId)
-		// console.log("avatars: " + JSON.stringify(getAvatars(currentRoom)))
+
 		for (const fig of getWhiteboard(roomId).figures) {
 			socket.emit("whiteboard-figure", fig)
 		}
@@ -84,11 +84,6 @@ io.on("connection", (socket) => {
 		for (let avatar in getAvatars(currentRoom)) {
 			socket.emit("avatar", avatar)
 		}
-
-		socket.on("removeAvatar", (avatar) => {
-			deleteAvatar(avatar.id, avatar.roomId)
-			socket.broadcast.to(roomId).emit("removeAvatar", avatar)
-		})
 
 		//socket.broadcast sends a message to everyone in the room
 		socket.broadcast.to(roomId).emit("user-connected", userId)
@@ -105,7 +100,13 @@ io.on("connection", (socket) => {
 
 	socket.on("avatar", (avatar) => {
 		addAvatar(avatar.id, avatar.roomId, avatar.top, avatar.left)
-		socket.broadcast.to(currentRoom).emit("avatar", avatar) // may not be needed
+		socket.broadcast.to(currentRoom).emit("avatar", avatar)
+	})
+
+	socket.on("removeAvatar", (avatar) => {
+		console.log("remoooooove avatar")
+		deleteAvatar(avatar.id, avatar.roomId)
+		socket.broadcast.to(roomId).emit("removeAvatar", avatar)
 	})
 })
 
