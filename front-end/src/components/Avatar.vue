@@ -1,15 +1,42 @@
 <template>
-  <!-- vuetify's avatar component for nicer look and easier use -->
+  <div>
+    <!-- vuetify's avatar component for nicer look and easier use -->
   <v-avatar id="avatar" size="90">
     <!-- using user's initial's from reigstration -->
-    {{ initials }}
+    <!-- {{ initials }} -->
+    <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" />
   </v-avatar>
+  </div>
 </template>
 
 <script>
+import VideoStream from "@/components/VideoStream";
+import { state } from "@/backend/peers";
+import { switchRoom } from "../backend/peers"
+
 export default {
   props: {
     name: String
+  },
+  data() {
+    return {
+      code: null,
+      // name: null,
+      reveal: false,
+    }
+  },
+  methods: {
+    submitCode() {
+      this.reveal = true;
+    },
+    joinRoom() {
+        switchRoom(this.code, this.name);
+        this.$router.push('/meeting');
+        console.log("joined");
+    }
+  },
+  components: {
+    VideoStream
   },
   computed: {
     initials() {
@@ -20,6 +47,12 @@ export default {
         .join('. ')
         .toUpperCase()
         + '.';
+    },
+    streams() {
+      return state.streams;
+    },
+    myName() {
+      return state.myName;
     }
   },
   mounted() {
