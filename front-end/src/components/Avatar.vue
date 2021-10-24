@@ -18,13 +18,6 @@ export default {
   props: {
     name: String
   },
-  data() {
-    return {
-      code: null,
-      // name: null,
-      reveal: false,
-    }
-  },
   methods: {
     submitCode() {
       this.reveal = true;

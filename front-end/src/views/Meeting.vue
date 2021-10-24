@@ -5,7 +5,9 @@
     <Whiteboard />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
     <Avatar :name="myName" /> 
+    <div id="user_controls">
     <UserControls />
+    </div>
   </div>
 </template>
 
@@ -42,3 +44,11 @@ export default {
   },
 };
 </script>
+<style>
+#user_controls {
+  position:absolute;
+   bottom:0;
+   width:100%;
+   height:60px;
+}
+</style>
