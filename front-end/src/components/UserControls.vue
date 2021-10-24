@@ -35,8 +35,8 @@
 export default {
   data() {
     return {
-      muted: false,
-      cameraOn: false,
+      muted: true,
+      cameraOn: true,
       drawingOn: false,
       toggle_multiple: [],
     };
