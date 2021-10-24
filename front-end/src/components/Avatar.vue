@@ -1,9 +1,12 @@
 <template>
   <div>
     <!-- vuetify's avatar component for nicer look and easier use -->
-  <v-avatar id="avatar" size="90">
+  <v-avatar v-if= cameraOn id="avatar" size="90">
     <!-- using user's initial's from reigstration -->
-    <!-- {{ initials }} -->
+    {{ initials }}
+  </v-avatar>
+  <v-avatar v-else id="avatar" size="100">
+    <!-- video stream replaces initials is applicable -->
     <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" />
   </v-avatar>
   </div>
@@ -16,7 +19,8 @@ import { switchRoom } from "../backend/peers"
 
 export default {
   props: {
-    name: String
+    name: String,
+    cameraOn: Boolean
   },
   methods: {
     submitCode() {

@@ -4,9 +4,9 @@
     <p>There are {{ streams.length }} streams</p>
     <Whiteboard />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
-    <Avatar :name="myName" /> 
+    <Avatar :name="myName" :cameraOn ="cameraOn"/> 
     <div id="user_controls">
-    <UserControls />
+    <UserControls @toggle_cam = 'toggleCam'/>
     </div>
   </div>
 </template>
@@ -25,9 +25,19 @@ export default {
     Avatar,
     UserControls,
   },
+  data() {
+    return {
+      cameraOn: true
+    }
+  },
   name: "Meeting",
   props: {
     msg: String,
+  },
+  methods:{
+    toggleCam(e) {
+      this.cameraOn = e;
+    }
   },
   computed: {
     streams() {
@@ -49,6 +59,5 @@ export default {
   position:absolute;
    bottom:0;
    width:100%;
-   height:60px;
 }
 </style>
