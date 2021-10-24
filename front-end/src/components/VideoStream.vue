@@ -18,3 +18,8 @@ export default {
   }
 };
 </script>
+<style>
+video {
+  height: 100%;
+}
+</style>
