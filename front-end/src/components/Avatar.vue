@@ -5,10 +5,7 @@
       <!-- using user's initial's from reigstration -->
       {{ initials }}
     </v-avatar>
-    <!-- <v-avatar v-for="avatar in avatars" :key="avatar.id"></v-avatar> -->
-    <!-- <h3>stuff</h3> -->
-    <!-- <h3>{{ avatars }}</h3>
-    <p></p> -->
+
     <h3 v-for="avatar in avatars" :key="avatar.id">
       <v-avatar
         :id="avatar.id"
@@ -52,14 +49,18 @@ export default {
     };
   },
   mounted() {
+
     this.id = uuidv4();
+
     let current_user_avatar = {
       id: this.id,
       roomId: this.roomId,
-      top: 0,
+      // both top and left need to be adjusted to match actual starting pos
+      top: 0,  
       left: 0,
     };
     sendAvatar(current_user_avatar);
+
     onAvatar((avatar) => {
       if (avatar.id) {
         if (this.id != avatar.id) {
@@ -71,11 +72,10 @@ export default {
           });
         }
       }
-      // console.log(JSON.stringify(this.avatars));
     });
     onRemoveAvatar((avatar) => {
-      console.log("remove avatar")
-      this.$delete(this.avatars, avatar.id)
+      console.log("remove avatar");
+      this.$delete(this.avatars, avatar.id);
     });
 
     moveElem(document.getElementById("current_user"), this.id, this.roomId);
@@ -124,7 +124,8 @@ export default {
       }
     }
   },
-  beforeUnmount() {
+
+  beforeDestroy() {
     const current_user_avatar = {
       id: this.id,
       roomId: this.roomId,
