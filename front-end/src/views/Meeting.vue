@@ -1,10 +1,13 @@
 <template>
   <div class="hello">
     <h1>Meeting Room</h1>
-    <p>There are {{ streams.length }} streams</p>
+    <p>{{ streams.length }} users are connected</p>
+    <p v-if="!myStreamIsOk">
+      You have not given Pond permission to use your microphone or webcam
+    </p>
     <Whiteboard />
     <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" />
-    <Avatar :name="myName" /> 
+    <Avatar :name="myName" />
     <UserControls />
   </div>
 </template>
@@ -13,8 +16,8 @@
 import { state } from "@/backend/peers";
 import VideoStream from "@/components/VideoStream";
 import Whiteboard from "../components/Whiteboard.vue";
-import Avatar from '../components/Avatar.vue';
-import UserControls from '../components/UserControls.vue';
+import Avatar from "../components/Avatar.vue";
+import UserControls from "../components/UserControls.vue";
 
 export default {
   components: {
@@ -33,7 +36,10 @@ export default {
     },
     myName() {
       return state.myName;
-    }
+    },
+    myStreamIsOk() {
+      return state.myStreamIsOk;
+    },
   },
   mounted() {
     if (state.roomId === null) {
