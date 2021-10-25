@@ -6,13 +6,12 @@
       {{ initials }}
     </v-avatar>
 
-    <h3 v-for="avatar in avatars" :key="avatar.id">
-      <v-avatar
-        :id="avatar.id"
-        :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}; left:${avatar.left};`"
-      ></v-avatar>
-      id: {{ avatar.id }}, top: {{ avatar.top }}, left: {{ avatar.left }}
-    </h3>
+    <v-avatar
+      v-for="avatar in avatars"
+      :key="avatar.id"
+      :id="avatar.id"
+      :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}; left:${avatar.left};`"
+    ></v-avatar>
   </div>
 </template>
 
@@ -49,15 +48,14 @@ export default {
     };
   },
   mounted() {
-
     this.id = uuidv4();
 
     let current_user_avatar = {
       id: this.id,
       roomId: this.roomId,
       // both top and left need to be adjusted to match actual starting pos
-      top: 0,  
-      left: 0,
+      top: 257,
+      left: 518,
     };
     sendAvatar(current_user_avatar);
 
@@ -74,7 +72,6 @@ export default {
       }
     });
     onRemoveAvatar((avatar) => {
-      console.log("remove avatar");
       this.$delete(this.avatars, avatar.id);
     });
 
@@ -139,6 +136,7 @@ export default {
 .v-avatar {
   position: absolute;
   background: rgb(17, 204, 157);
+  z-index: 100;
 }
 
 #current_user {
@@ -146,6 +144,7 @@ export default {
   background: rgb(20, 145, 202);
   cursor: move;
   cursor: grab;
+  z-index: 500;
 }
 
 #current_user:active {
