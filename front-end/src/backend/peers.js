@@ -82,6 +82,10 @@ export function switchRoom(roomId, name) {
         sendJoinRoom(roomId, userId)
     })
 
+    state.me.on("close", event => console.log("Closed", event));
+    state.me.on("destroyed", event => console.log("Destroyed", event));
+    window.me = state.me;
+
     handlers.onUserConnected = async userId => {
         console.log('User connected', userId);
         /// Send an outgoing connection...

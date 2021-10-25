@@ -3,7 +3,10 @@ const server = require('./app')
 const { PeerServer } = require('peer')
 
 // Start peerjs on port 8001 (trying to do it on 8000 conflicts with socketIo)
-PeerServer({ port: 8001 }, () => {
+PeerServer({ 
+  port: 8001,
+  alive_timeout: 9e99,
+}, () => {
   console.log('Peer server listening on port 8001')
 })
 
