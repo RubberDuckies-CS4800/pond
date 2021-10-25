@@ -4,6 +4,7 @@
 const cors = require("cors")
 const path = require("path")
 const { v4: uuidV4 } = require("uuid")
+const _ = require("lodash")
 
 const express = require("express")
 const app = express()
@@ -58,7 +59,7 @@ function deleteAvatar(avatar, roomId) {
 }
 
 function getAvatars(roomId) {
-	if (Object.keys(rooms).length === 0) {
+	if (_.isEmpty(rooms)){
 		return null
 	}
 	return rooms[roomId]
