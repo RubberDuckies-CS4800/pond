@@ -120,8 +120,18 @@ export default {
         document.onmousemove = null;
       }
     }
+
+    // // when the user closes the window, remove their avatar
+    // window.addEventListener("beforeunload", () => {
+    //   const current_user_avatar = {
+    //   id: this.id,
+    //   roomId: this.roomId,
+    // };
+    // removeAvatar(current_user_avatar);
+    // })
   },
 
+  // when the user leaves the room by routing, remove the avatar
   beforeDestroy() {
     const current_user_avatar = {
       id: this.id,
