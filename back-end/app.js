@@ -107,9 +107,7 @@ io.on("connection", (socket) => {
 		socket.broadcast.to(avatar.roomId).emit("removeAvatar", avatar)
 
 		if (_.isEmpty(getAvatars(avatar.roomId))) {
-			console.log("remove whiteboard from room: " + avatar.roomId)
 			deleteWhiteboard(avatar.roomId)
-			console.log(JSON.stringify(whiteboards))
 		}
 	})
 })
