@@ -5,13 +5,13 @@
       <!-- using user's initial's from reigstration -->
       {{ initials }}
     </v-avatar>
-
     <v-avatar
       v-for="avatar in avatars"
       :key="avatar.id"
       :id="avatar.id"
       :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}; left:${avatar.left};`"
-    ></v-avatar>
+      >{{ avatar.initials }}
+    </v-avatar>
   </div>
 </template>
 
@@ -47,12 +47,19 @@ export default {
       id: null,
     };
   },
+  created() {
+    // when the user closes the window, remove their avatar
+    // not working - does not seem to remove avatar
+    // it also attempts to remove an avatar when the page loads
+    // window.addEventListener("beforeunload", this.removeAvatarHandler())
+  },
   mounted() {
     this.id = uuidv4();
 
     let current_user_avatar = {
       id: this.id,
       roomId: this.roomId,
+      initials: this.initials,
       // both top and left need to be adjusted to match actual starting pos
       top: 257,
       left: 518,
@@ -65,6 +72,7 @@ export default {
           this.$set(this.avatars, avatar.id, {
             id: avatar.id,
             roomId: avatar.roomId,
+            initials: avatar.initials,
             top: avatar.top,
             left: avatar.left,
           });
@@ -75,8 +83,13 @@ export default {
       this.$delete(this.avatars, avatar.id);
     });
 
-    moveElem(document.getElementById("current_user"), this.id, this.roomId);
-    function moveElem(draggableElem, avatarId, roomId) {
+    moveElem(
+      document.getElementById("current_user"),
+      this.id,
+      this.roomId,
+      this.initials
+    );
+    function moveElem(draggableElem, avatarId, roomId, initials) {
       var pos1 = 0,
         pos2 = 0,
         pos3 = 0,
@@ -109,6 +122,7 @@ export default {
         let current_user_avatar = {
           id: avatarId,
           roomId: roomId,
+          initials: initials,
           top: draggableElem.style.top,
           left: draggableElem.style.left,
         };
@@ -120,24 +134,20 @@ export default {
         document.onmousemove = null;
       }
     }
-
-    // // when the user closes the window, remove their avatar
-    // window.addEventListener("beforeunload", () => {
-    //   const current_user_avatar = {
-    //   id: this.id,
-    //   roomId: this.roomId,
-    // };
-    // removeAvatar(current_user_avatar);
-    // })
   },
 
   // when the user leaves the room by routing, remove the avatar
   beforeDestroy() {
-    const current_user_avatar = {
-      id: this.id,
-      roomId: this.roomId,
-    };
-    removeAvatar(current_user_avatar);
+    this.removeAvatarHandler();
+  },
+  methods: {
+    removeAvatarHandler() {
+      const current_user_avatar = {
+        id: this.id,
+        roomId: this.roomId,
+      };
+      removeAvatar(current_user_avatar);
+    },
   },
 };
 </script>
