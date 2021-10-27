@@ -15,18 +15,20 @@
     </v-avatar>
 
     <v-avatar
+      size="120"
       v-for="avatar in avatars"
       :key="avatar.id"
       :id="avatar.id"
       :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}; left:${avatar.left};`"
-    ></v-avatar>
+      >{{ avatar.initials }}
+    </v-avatar>
   </div>
 </template>
 
 <script>
 import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
-import { switchRoom } from "../backend/peers"
+import { switchRoom } from "../backend/peers";
 import {
   sendAvatar,
   onAvatar,
@@ -42,34 +44,42 @@ export default {
     roomId: String,
   },
   methods: {
+    removeAvatarHandler() {
+      const current_user_avatar = {
+        id: this.id,
+        roomId: this.roomId,
+      };
+      removeAvatar(current_user_avatar);
+    },
     submitCode() {
       this.reveal = true;
     },
     joinRoom() {
-        switchRoom(this.code, this.name);
-        this.$router.push('/meeting');
-        console.log("joined");
-    }
+      switchRoom(this.code, this.name);
+      this.$router.push("/meeting");
+      console.log("joined");
+    },
   },
   components: {
-    VideoStream
+    VideoStream,
   },
   computed: {
     initials() {
-      return this.name
-        .split(' ')
-        .map(x => x.charAt(0))
-        .slice(0, 2)
-        .join('. ')
-        .toUpperCase()
-        + '.';
+      return (
+        this.name
+          .split(" ")
+          .map((x) => x.charAt(0))
+          .slice(0, 2)
+          .join(". ")
+          .toUpperCase() + "."
+      );
     },
     streams() {
       return state.streams;
     },
     myName() {
       return state.myName;
-    }
+    },
   },
   data() {
     return {
@@ -77,12 +87,19 @@ export default {
       id: null,
     };
   },
+  created() {
+    // when the user closes the window, remove their avatar
+    // not working - does not seem to remove avatar
+    // it also attempts to remove an avatar when the page loads
+    window.addEventListener("beforeunload", () => this.removeAvatarHandler())
+  },
   mounted() {
     this.id = uuidv4();
 
     let current_user_avatar = {
       id: this.id,
       roomId: this.roomId,
+      initials: this.initials,
       // both top and left need to be adjusted to match actual starting pos
       top: 257,
       left: 518,
@@ -95,6 +112,7 @@ export default {
           this.$set(this.avatars, avatar.id, {
             id: avatar.id,
             roomId: avatar.roomId,
+            initials: avatar.initials,
             top: avatar.top,
             left: avatar.left,
           });
@@ -105,8 +123,13 @@ export default {
       this.$delete(this.avatars, avatar.id);
     });
 
-    moveElem(document.getElementById("current_user"), this.id, this.roomId);
-    function moveElem(draggableElem, avatarId, roomId) {
+    moveElem(
+      document.getElementById("current_user"),
+      this.id,
+      this.roomId,
+      this.initials
+    );
+    function moveElem(draggableElem, avatarId, roomId, initials) {
       var pos1 = 0,
         pos2 = 0,
         pos3 = 0,
@@ -139,6 +162,7 @@ export default {
         let current_user_avatar = {
           id: avatarId,
           roomId: roomId,
+          initials: initials,
           top: draggableElem.style.top,
           left: draggableElem.style.left,
         };
@@ -152,12 +176,9 @@ export default {
     }
   },
 
+  // when the user leaves the room by routing, remove the avatar
   beforeDestroy() {
-    const current_user_avatar = {
-      id: this.id,
-      roomId: this.roomId,
-    };
-    removeAvatar(current_user_avatar);
+    this.removeAvatarHandler();
   },
 };
 </script>

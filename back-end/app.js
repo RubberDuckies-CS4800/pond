@@ -36,11 +36,15 @@ function getWhiteboard(id) {
 	return whiteboards[id]
 }
 
+function deleteWhiteboard(id) {
+	delete whiteboards[id]
+}
+
 // this may be necessary,
 // since one person cannot be in more than one room
 const rooms = {}
 
-function addAvatar(avatar, roomId, top, left) {
+function addAvatar(avatar, roomId, initials, top, left) {
 	if (!(roomId in rooms)) {
 		rooms[roomId] = {}
 	}
@@ -49,27 +53,27 @@ function addAvatar(avatar, roomId, top, left) {
 	room_avatars[avatar] = {
 		id: avatar,
 		room: roomId,
+		initials: initials,
 		top: top,
 		left: left,
 	}
 }
 
 function deleteAvatar(avatar, roomId) {
-	delete getAvatars(roomId)[avatar]
+	if (getAvatars(roomId)) {
+		delete getAvatars(roomId)[avatar]
+	}
 }
 
 function getAvatars(roomId) {
-	if (_.isEmpty(rooms)){
+	if (_.isEmpty(rooms)) {
 		return null
 	}
 	return rooms[roomId]
 }
 
-// eventually should remove the avatar if the user leaves
-
 io.on("connection", (socket) => {
 	let currentRoom = null
-	console.log("connection!!!")
 	socket.on("join-room", (roomId, userId) => {
 		currentRoom = roomId
 
@@ -80,6 +84,7 @@ io.on("connection", (socket) => {
 		}
 
 		for (const avatar in getAvatars(currentRoom)) {
+			console.log("added to the new user: " + JSON.stringify(avatar))
 			socket.emit("avatar", getAvatars(currentRoom)[avatar])
 		}
 
@@ -97,13 +102,18 @@ io.on("connection", (socket) => {
 	})
 
 	socket.on("avatar", (avatar) => {
-		addAvatar(avatar.id, avatar.roomId, avatar.top, avatar.left)
+		addAvatar(avatar.id, avatar.roomId, avatar.initials, avatar.top, avatar.left)
 		socket.broadcast.to(avatar.roomId).emit("avatar", avatar)
 	})
 
 	socket.on("removeAvatar", (avatar) => {
 		deleteAvatar(avatar.id, avatar.roomId)
+		console.log("removed")
 		socket.broadcast.to(avatar.roomId).emit("removeAvatar", avatar)
+
+		if (_.isEmpty(getAvatars(avatar.roomId))) {
+			deleteWhiteboard(avatar.roomId)
+		}
 	})
 })
 

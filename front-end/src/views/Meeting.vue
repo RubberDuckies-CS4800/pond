@@ -4,7 +4,7 @@
     <p>There are {{ streams.length }} streams</p>
     <Whiteboard />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
-    <Avatar :name="myName" :roomId="roomId" :cameraOn="cameraOn" />
+    <Avatars :name="myName" :roomId="roomId" :cameraOn="cameraOn" />
     <div id="user_controls">
       <UserControls @toggle_cam="toggleCam" />
     </div>
@@ -15,14 +15,14 @@
 import { state } from "@/backend/peers";
 // import VideoStream from "@/components/VideoStream";
 import Whiteboard from "../components/Whiteboard.vue";
-import Avatar from "../components/Avatar.vue";
+import Avatars from "../components/Avatars.vue";
 import UserControls from '../components/UserControls.vue';
 
 export default {
   components: {
     // VideoStream,
     Whiteboard,
-    Avatar,
+    Avatars,
     UserControls,
   },
   data() {
