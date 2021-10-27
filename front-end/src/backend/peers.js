@@ -2,6 +2,17 @@ import Peer from 'peerjs-client';
 import Vue from 'vue';
 import { sendJoinRoom, handlers } from './socket';
 
+function createEmptyAudioTrack() {
+    const ctx = new AudioContext();
+    const oscillator = ctx.createOscillator();
+    const dst = oscillator.connect(ctx.createMediaStreamDestination());
+    oscillator.start();
+    const track = dst.stream.getAudioTracks()[0];
+    return Object.assign(track, { enabled: false });
+}
+
+const fakeStream = new MediaStream([createEmptyAudioTrack()]);
+
 async function getMedia() {
     const md = navigator.mediaDevices
     try {
@@ -10,7 +21,7 @@ async function getMedia() {
     try {
         return await md.getUserMedia({ audio: true, video: false });
     } catch (e) { /* */ }
-    throw new Error('TODO: Inform user that they need at least audio');
+    return fakeStream;
 }
 
 // Make these observable so that the UI will automatically update when they
@@ -21,6 +32,7 @@ export const state = Vue.observable({
     streams: [],
     me: null,
     myName: null,
+    myStreamIsOk: false,
 });
 
 let connections = {};
@@ -61,11 +73,18 @@ export function switchRoom(roomId, name) {
         }[window.location.protocol]
     })
     const myStream = getMedia();
-    myStream.then(stream => state.streams.push(stream));
+    myStream.then(stream => {
+        state.myStreamIsOk = stream !== fakeStream
+        state.streams.push(stream)
+    });
 
     state.me.on("open", userId => {
         sendJoinRoom(roomId, userId)
     })
+
+    state.me.on("close", event => console.log("Closed", event));
+    state.me.on("destroyed", event => console.log("Destroyed", event));
+    window.me = state.me;
 
     handlers.onUserConnected = async userId => {
         console.log('User connected', userId);
