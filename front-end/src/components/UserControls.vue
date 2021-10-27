@@ -35,8 +35,8 @@
 export default {
   data() {
     return {
-      muted: false,
-      cameraOn: false,
+      muted: true,
+      cameraOn: true,
       drawingOn: false,
       toggle_multiple: [],
     };
@@ -47,6 +47,7 @@ export default {
     },
     toggleCamera() {
       this.cameraOn = !this.cameraOn;
+      this.$emit('toggle_cam', this.cameraOn)
     },
     toggleDraw() {
       this.drawingOn = !this.drawingOn;
