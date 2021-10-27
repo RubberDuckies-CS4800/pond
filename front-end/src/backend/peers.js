@@ -32,6 +32,7 @@ export const state = Vue.observable({
     streams: [],
     me: null,
     myName: null,
+    myStream: null,
     myStreamIsOk: false,
 });
 
@@ -74,6 +75,7 @@ export function switchRoom(roomId, name) {
     })
     const myStream = getMedia();
     myStream.then(stream => {
+        state.myStream = stream
         state.myStreamIsOk = stream !== fakeStream
         state.streams.push(stream)
     });

@@ -8,9 +8,7 @@
     <v-avatar v-else id="current_user" size="120">
       <!-- video stream replaces initials is applicable -->
       <VideoStream
-        v-for="stream in streams"
-        :key="stream.id"
-        :stream="stream"
+        :stream="myStream"
       />
     </v-avatar>
 
@@ -80,6 +78,9 @@ export default {
     myName() {
       return state.myName;
     },
+    myStream() {
+      return state.myStream;
+    }
   },
   data() {
     return {
