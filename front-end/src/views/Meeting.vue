@@ -4,9 +4,9 @@
     <p>There are {{ streams.length }} streams</p>
     <Whiteboard />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
-    <Avatar :name="myName" :cameraOn ="cameraOn"/> 
+    <Avatar :name="myName" :roomId="roomId" :cameraOn="cameraOn" />
     <div id="user_controls">
-    <UserControls @toggle_cam = 'toggleCam'/>
+      <UserControls @toggle_cam="toggleCam" />
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
 import { state } from "@/backend/peers";
 // import VideoStream from "@/components/VideoStream";
 import Whiteboard from "../components/Whiteboard.vue";
-import Avatar from '../components/Avatar.vue';
+import Avatar from "../components/Avatar.vue";
 import UserControls from '../components/UserControls.vue';
 
 export default {
@@ -27,17 +27,17 @@ export default {
   },
   data() {
     return {
-      cameraOn: true
-    }
+      cameraOn: true,
+    };
   },
   name: "Meeting",
   props: {
     msg: String,
   },
-  methods:{
+  methods: {
     toggleCam(e) {
       this.cameraOn = e;
-    }
+    },
   },
   computed: {
     streams() {
@@ -45,7 +45,10 @@ export default {
     },
     myName() {
       return state.myName;
-    }
+    },
+    roomId() {
+      return state.roomId;
+    },
   },
   mounted() {
     if (state.roomId === null) {
@@ -56,8 +59,8 @@ export default {
 </script>
 <style>
 #user_controls {
-  position:absolute;
-   bottom:0;
-   width:100%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 </style>
