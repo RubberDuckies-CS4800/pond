@@ -21,5 +21,6 @@ export default {
 <style>
 video {
   height: 100%;
+  transform: rotateY(180deg);
 }
 </style>
