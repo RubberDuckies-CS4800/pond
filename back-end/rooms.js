@@ -8,7 +8,11 @@ function newRoom(id) {
         avatars: {},
         figures: [],
         updateAvatar(avatar) {
-            this.avatars[avatar.id] = avatar
+            this.avatars[avatar.id] = {
+                ...this.avatars[avatar.id],
+                ...avatar,
+            }
+            return this.avatars[avatar.id]
         },
         deleteAvatar(id) {
             if (id in this.avatars) {

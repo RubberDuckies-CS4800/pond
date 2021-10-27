@@ -1,6 +1,6 @@
 import Peer from 'peerjs-client';
 import Vue from 'vue';
-import { sendJoinRoom, handlers } from './socket';
+import { sendJoinRoom, handlers, sendAvatar } from './socket';
 
 function createEmptyAudioTrack() {
     const ctx = new AudioContext();
@@ -30,8 +30,9 @@ async function getMedia() {
 export const state = Vue.observable({
     roomId: null,
     streams: [],
-    me: null,
+    myId: null,
     myName: null,
+    myPeer: null,
     myStream: null,
     myStreamIsOk: false,
 });
@@ -66,7 +67,7 @@ export function switchRoom(roomId, name) {
     state.myName = name;
     state.streams = [];
     let host = window.location.hostname;
-    state.me = new Peer(undefined, {
+    state.myPeer = new Peer(undefined, {
         host: host,
         port: {
             "http:": "8001",
@@ -80,18 +81,20 @@ export function switchRoom(roomId, name) {
         state.streams.push(stream)
     });
 
-    state.me.on("open", userId => {
-        sendJoinRoom(roomId, userId)
+    state.myPeer.on("open", userId => {
+        state.myId = userId
+        sendJoinRoom(roomId, userId);
+        sendAvatar({ name: name });
     })
 
-    state.me.on("close", event => console.log("Closed", event));
-    state.me.on("destroyed", event => console.log("Destroyed", event));
-    window.me = state.me;
+    state.myPeer.on("close", event => console.log("Closed", event));
+    state.myPeer.on("destroyed", event => console.log("Destroyed", event));
+    window.me = state.myPeer;
 
     handlers.onUserConnected = async userId => {
         console.log('User connected', userId);
         /// Send an outgoing connection...
-        const call = state.me.call(userId, await myStream);
+        const call = state.myPeer.call(userId, await myStream);
         connections[userId] = new Connection(call);
     };
 
@@ -103,7 +106,7 @@ export function switchRoom(roomId, name) {
     };
 
     /// On incoming connection...
-    state.me.on("call", async call => {
+    state.myPeer.on("call", async call => {
         connections[call.peer] = new Connection(call);
         call.answer(await myStream);
     });
