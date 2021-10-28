@@ -1,13 +1,6 @@
 <template>
   <div>
-    <Avatar
-      v-for="avatar of avatars"
-      :key="avatar.id"
-      :userId="avatar.id"
-      :name="avatar.name || ''"
-      :top="avatar.top"
-      :left="avatar.left"
-    />
+    <Avatar v-for="avatar of avatars" :key="avatar.id" :avatar="avatar" />
   </div>
 </template>
 

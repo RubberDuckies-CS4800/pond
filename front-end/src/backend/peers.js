@@ -44,6 +44,9 @@ class Connection {
         this.call = call;
         this.stream = null;
         this.call.on('stream', stream => {
+            // This way we know who the stream represents, so we can assign it
+            // to an avatar.
+            stream.peer = call.peer;
             this.stream = stream;
             state.streams.push(stream);
         });
@@ -76,6 +79,7 @@ export function switchRoom(roomId, name) {
     })
     const myStream = getMedia();
     myStream.then(stream => {
+        stream.peer = state.myId
         state.myStream = stream
         state.myStreamIsOk = stream !== fakeStream
         state.streams.push(stream)
@@ -83,6 +87,7 @@ export function switchRoom(roomId, name) {
 
     state.myPeer.on("open", userId => {
         state.myId = userId
+        if (state.myStream) state.myStream.peer = state.myId
         sendJoinRoom(roomId, userId);
         updateAvatar({ name: name });
     })

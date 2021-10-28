@@ -47,6 +47,14 @@ export function onRemoveAvatar(avatar) {
 	socket.on("remove-avatar", avatar)
 }
 
+export function setAudioEnabled(audioEnabled) {
+	socket.emit("avatar", { audio: audioEnabled })
+}
+
+export function setVideoEnabled(videoEnabled) {
+	socket.emit("avatar", { video: videoEnabled })
+}
+
 // Extra client-side socket connection events
 socket.on("connect", () => {
 	console.log(`Socket Connected: ${socket.connected}`) // true

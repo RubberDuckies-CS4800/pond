@@ -1,10 +1,14 @@
 <template>
   <v-avatar
     size="120"
-    :id="userId"
-    :style="`height: 90px; min-width: 90px; width: 90px; top: ${top}px; left:${left}px;`"
+    :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
     @mousedown="onMouseDown($event)"
-    >{{ initials }}
+  >
+    <div v-if="!stream || !avatar.video">
+      {{ initials }}
+    </div>
+    <VideoStream :stream="stream" v-if="stream && avatar.video" />
+    <VideoStream style="visibility:none" :stream="stream" v-if="stream && !avatar.video && avatar.audio" />
   </v-avatar>
 </template>
 
@@ -13,15 +17,12 @@
 import { state } from "@/backend/peers";
 // import { switchRoom } from "../backend/peers";
 import { updateAvatar } from "@/backend/socket";
+import VideoStream from './VideoStream.vue';
 
 export default {
+  components: { VideoStream },
   props: {
-    userId: String,
-    name: String,
-    top: Number,
-    left: Number,
-    // cameraOn: Boolean,
-    // roomId: String,
+    avatar: Object,
   },
   data() {
     return {
@@ -32,7 +33,7 @@ export default {
   computed: {
     initials() {
       return (
-        this.name
+        (this.avatar.name || "")
           .split(" ")
           .map((x) => x.charAt(0))
           .slice(0, 2)
@@ -40,22 +41,28 @@ export default {
           .toUpperCase() + "."
       );
     },
-    streams() {
-      return state.streams;
+    stream() {
+      for (const stream of state.streams) {
+        console.log(stream.peer, this.avatar.id);
+        if (stream.peer.indexOf(this.avatar.id) !== -1) {
+          return stream;
+        }
+      }
+      return null;
     },
     draggable() {
-      return state.myId === this.userId;
+      return state.myId === this.avatar.id;
     },
   },
   methods: {
     // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
     onMouseDown(e) {
-      if (this.userId !== state.myId) return;
+      if (!this.draggable) return;
       e.preventDefault();
       document.onmouseup = () => this.onMouseUp();
       document.onmousemove = (e) => this.onMouseMove(e);
-      this.dragOffsetX = e.clientX - this.left;
-      this.dragOffsetY = e.clientY - this.top;
+      this.dragOffsetX = e.clientX - this.avatar.left;
+      this.dragOffsetY = e.clientY - this.avatar.top;
     },
     onMouseMove(e) {
       e.preventDefault();
