@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const socketIo = require("socket.io")
 const { getRoom } = require("./rooms")
 
@@ -10,22 +11,35 @@ function handleConnection(socket) {
         currentRoom = getRoom(roomId)
         socket.join(roomId)
 
+        console.log("Join Room");
+
         for (const fig of currentRoom.figures) {
             socket.emit("whiteboard-figure", fig)
         }
-        for (const avatar in currentRoom.avatars) {
+        currentRoom.avatars[userId] = {
+            id: userId,
+            name: "",
+            top: 4.5,
+            left: 8.0,
+            audio: false,
+            video: false,
+        }
+        for (const avatar of Object.values(currentRoom.avatars)) {
             socket.emit("avatar", avatar)
         }
 
         //socket.broadcast sends a message to everyone in the room
         socket.broadcast.to(roomId).emit("user-connected", userId)
+        socket.broadcast.to(roomId).emit("avatar", currentRoom.avatars[userId])
 
         socket.on("disconnect", () => {
+            console.log("Socket disconnected!")
             socket.broadcast.to(roomId).emit("user-disconnected", userId)
             currentRoom.deleteAvatar(userId);
+            socket.broadcast.to(roomId).emit("remove-avatar", userId)
 
             if (_.isEmpty(currentRoom.avatars)) {
-                currentRoom.figures.clear()
+                currentRoom.figures = []
             }
         })
     })
@@ -39,16 +53,9 @@ function handleConnection(socket) {
 
     socket.on("avatar", (avatar) => {
         if (currentRoom) {
-            currentRoom.updateAvatar(avatar)
-            socket.broadcast.to(currentRoom.id).emit("avatar", avatar)
-        }
-    })
-
-    socket.on("removeAvatar", (id) => {
-        if (currentRoom) {
-            currentRoom.deleteAvatar(id)
-            console.log("removed")
-            socket.broadcast.to(avatar.roomId).emit("removeAvatar", avatar)
+            const updated = currentRoom.updateAvatar({ id: userId, ...avatar })
+            socket.broadcast.to(currentRoom.id).emit("avatar", updated)
+            socket.emit("avatar", updated)
         }
     })
 }

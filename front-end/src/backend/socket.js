@@ -35,7 +35,7 @@ export function onWhiteboardFigure(handler) {
 	socket.on("whiteboard-figure", handler)
 }
 
-export function sendAvatar(avatar) {
+export function updateAvatar(avatar) {
 	socket.emit("avatar", avatar)
 }
 
@@ -43,12 +43,16 @@ export function onAvatar(avatar) {
 	socket.on("avatar", avatar)
 }
 
-export function removeAvatar(avatar) {
-	socket.emit("removeAvatar", avatar)
+export function onRemoveAvatar(avatar) {
+	socket.on("remove-avatar", avatar)
 }
 
-export function onRemoveAvatar(avatar) {
-	socket.on("removeAvatar", avatar)
+export function setAudioEnabled(audioEnabled) {
+	socket.emit("avatar", { audio: audioEnabled })
+}
+
+export function setVideoEnabled(videoEnabled) {
+	socket.emit("avatar", { video: videoEnabled })
 }
 
 // Extra client-side socket connection events
