@@ -57,10 +57,9 @@ export default {
   mounted() {
     onAvatar((avatar) => {
       this.$set(this.avatars, avatar.id, avatar);
-      console.log(this.avatars);
     });
-    onRemoveAvatar((avatar) => {
-      this.$delete(this.avatars, avatar.id);
+    onRemoveAvatar((id) => {
+      this.$delete(this.avatars, id);
     });
   },
 };

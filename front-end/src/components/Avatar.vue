@@ -12,7 +12,7 @@
 // import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
 // import { switchRoom } from "../backend/peers";
-import { sendAvatar } from "@/backend/socket";
+import { updateAvatar } from "@/backend/socket";
 
 export default {
   props: {
@@ -59,7 +59,7 @@ export default {
     },
     onMouseMove(e) {
       e.preventDefault();
-      sendAvatar({
+      updateAvatar({
         left: e.clientX - this.dragOffsetX,
         top: e.clientY - this.dragOffsetY,
       });

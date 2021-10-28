@@ -35,7 +35,7 @@ export function onWhiteboardFigure(handler) {
 	socket.on("whiteboard-figure", handler)
 }
 
-export function sendAvatar(avatar) {
+export function updateAvatar(avatar) {
 	socket.emit("avatar", avatar)
 }
 
@@ -43,12 +43,8 @@ export function onAvatar(avatar) {
 	socket.on("avatar", avatar)
 }
 
-export function removeAvatar(avatar) {
-	socket.emit("removeAvatar", avatar)
-}
-
 export function onRemoveAvatar(avatar) {
-	socket.on("removeAvatar", avatar)
+	socket.on("remove-avatar", avatar)
 }
 
 // Extra client-side socket connection events

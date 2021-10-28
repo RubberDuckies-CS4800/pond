@@ -21,6 +21,8 @@ function handleConnection(socket) {
             name: "",
             top: 4.5,
             left: 8.0,
+            audio: false,
+            video: false,
         }
         for (const avatar of Object.values(currentRoom.avatars)) {
             socket.emit("avatar", avatar)
@@ -31,8 +33,10 @@ function handleConnection(socket) {
         socket.broadcast.to(roomId).emit("avatar", currentRoom.avatars[userId])
 
         socket.on("disconnect", () => {
+            console.log("Socket disconnected!")
             socket.broadcast.to(roomId).emit("user-disconnected", userId)
             currentRoom.deleteAvatar(userId);
+            socket.broadcast.to(roomId).emit("remove-avatar", userId)
 
             if (_.isEmpty(currentRoom.avatars)) {
                 currentRoom.figures = []
@@ -48,19 +52,10 @@ function handleConnection(socket) {
     })
 
     socket.on("avatar", (avatar) => {
-        console.log("Avatar");
         if (currentRoom) {
             const updated = currentRoom.updateAvatar({ id: userId, ...avatar })
             socket.broadcast.to(currentRoom.id).emit("avatar", updated)
             socket.emit("avatar", updated)
-        }
-    })
-
-    socket.on("removeAvatar", () => {
-        if (currentRoom) {
-            currentRoom.deleteAvatar(userId)
-            console.log("removed")
-            socket.broadcast.to(avatar.roomId).emit("removeAvatar", avatar)
         }
     })
 }

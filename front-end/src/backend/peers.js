@@ -1,6 +1,6 @@
 import Peer from 'peerjs-client';
 import Vue from 'vue';
-import { sendJoinRoom, handlers, sendAvatar } from './socket';
+import { sendJoinRoom, handlers, updateAvatar } from './socket';
 
 function createEmptyAudioTrack() {
     const ctx = new AudioContext();
@@ -84,7 +84,7 @@ export function switchRoom(roomId, name) {
     state.myPeer.on("open", userId => {
         state.myId = userId
         sendJoinRoom(roomId, userId);
-        sendAvatar({ name: name });
+        updateAvatar({ name: name });
     })
 
     state.myPeer.on("close", event => console.log("Closed", event));
