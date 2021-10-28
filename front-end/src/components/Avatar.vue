@@ -8,7 +8,9 @@
       {{ initials }}
     </div>
     <VideoStream :stream="stream" v-if="stream && avatar.video" />
-    <VideoStream style="visibility:none" :stream="stream" v-if="stream && !avatar.video && avatar.audio" />
+    <div style="display: none;">
+      <VideoStream :stream="stream" v-if="stream && !avatar.video && avatar.audio" />
+    </div>
   </v-avatar>
 </template>
 
@@ -43,7 +45,6 @@ export default {
     },
     stream() {
       for (const stream of state.streams) {
-        console.log(stream.peer, this.avatar.id);
         if (stream.peer.indexOf(this.avatar.id) !== -1) {
           return stream;
         }
