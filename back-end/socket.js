@@ -63,6 +63,10 @@ function handleConnection(socket) {
         if (currentRoom) {
             currentRoom.deleteAvatar(avatarId)
             socket.broadcast.to(currentRoom.id).emit("remove-avatar", avatarId)
+
+            if (_.isEmpty(currentRoom.avatars)) {
+                currentRoom.figures = []
+            }
         }
     })
 }
