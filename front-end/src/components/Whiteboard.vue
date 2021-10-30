@@ -32,6 +32,9 @@ import { v4 as uuidv4 } from "uuid";
 export default {
   components: { WhiteboardFigure },
   name: "Whiteboard",
+  props: {
+    whiteboardActive: Boolean,
+  },
   computed: {
     streams() {
       return state.streams;
@@ -126,6 +129,7 @@ export default {
 
     onMouseDown(event) {
       if (this.drawingNow) return; // This can happen if you leave the window while drawing
+      if (!this.whiteboardActive) return;
       this.drawingNow = true;
       this.lastPoint = this.mouseToCanvasPosition(event);
       const { x, y } = this.lastPoint;

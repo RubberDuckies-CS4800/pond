@@ -5,11 +5,14 @@
     <p v-if="!myStreamIsOk">
       You have not given Pond permission to use your microphone or webcam
     </p>
-    <Whiteboard />
+    <Whiteboard :whiteboardActive="whiteboardActive" />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
     <Avatars :name="myName" :roomId="roomId" :cameraOn="cameraOn" />
     <div id="user_controls">
-      <UserControls @toggle_cam="toggleCam" />
+      <UserControls
+        @toggle_cam="toggleCam"
+        @setWhiteboardActive="setWhiteboardActive"
+      />
     </div>
   </div>
 </template>
@@ -19,7 +22,7 @@ import { state } from "@/backend/peers";
 // import VideoStream from "@/components/VideoStream";
 import Whiteboard from "../components/Whiteboard.vue";
 import Avatars from "../components/Avatars.vue";
-import UserControls from '../components/UserControls.vue';
+import UserControls from "../components/UserControls.vue";
 
 export default {
   components: {
@@ -31,6 +34,7 @@ export default {
   data() {
     return {
       cameraOn: true,
+      whiteboardActive: true,
     };
   },
   name: "Meeting",
@@ -40,6 +44,9 @@ export default {
   methods: {
     toggleCam(e) {
       this.cameraOn = e;
+    },
+    setWhiteboardActive(whiteboardActive) {
+      this.whiteboardActive = whiteboardActive;
     },
   },
   computed: {

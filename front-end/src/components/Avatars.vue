@@ -4,7 +4,6 @@
       v-for="avatar of avatars"
       :key="avatar.id"
       :avatar="avatar"
-      @removeAvatar="removeAvatar"
     />
   </div>
 </template>

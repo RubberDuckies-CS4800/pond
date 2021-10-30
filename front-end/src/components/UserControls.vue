@@ -55,6 +55,7 @@ export default {
     },
     toggleDraw() {
       this.drawingOn = !this.drawingOn;
+      this.$emit("setWhiteboardActive", this.drawingOn)
     },
     exitRoom() {
       console.log("Trying to exit the current room.");
