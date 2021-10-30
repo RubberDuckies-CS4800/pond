@@ -47,6 +47,10 @@ export function onRemoveAvatar(avatar) {
 	socket.on("remove-avatar", avatar)
 }
 
+export function removeAvatar(avatarId) {
+	socket.emit("remove-avatar", avatarId)
+}
+
 export function setAudioEnabled(audioEnabled) {
 	socket.emit("avatar", { audio: audioEnabled })
 }

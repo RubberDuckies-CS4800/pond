@@ -8,18 +8,19 @@
       {{ initials }}
     </div>
     <VideoStream :stream="stream" v-if="stream && avatar.video" />
-    <div style="display: none;">
-      <VideoStream :stream="stream" v-if="stream && !avatar.video && avatar.audio" />
+    <div style="display: none">
+      <VideoStream
+        :stream="stream"
+        v-if="stream && !avatar.video && avatar.audio"
+      />
     </div>
   </v-avatar>
 </template>
 
 <script>
-// import VideoStream from "@/components/VideoStream";
+import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
-// import { switchRoom } from "../backend/peers";
-import { updateAvatar } from "@/backend/socket";
-import VideoStream from './VideoStream.vue';
+import { updateAvatar, removeAvatar } from "@/backend/socket";
 
 export default {
   components: { VideoStream },
@@ -77,6 +78,11 @@ export default {
       document.onmouseup = null;
       document.onmousemove = null;
     },
+  },
+  beforeDestroy() {
+    if (this.draggable) {
+      removeAvatar(this.avatar.id);
+    }
   },
 };
 </script>

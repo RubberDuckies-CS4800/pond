@@ -39,7 +39,7 @@ export default {
     return {
       audioOn: false,
       cameraOn: false,
-      drawingOn: false,
+      drawingOn: true,
       toggle_multiple: [],
     };
   },

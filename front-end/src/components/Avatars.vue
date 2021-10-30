@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Avatar v-for="avatar of avatars" :key="avatar.id" :avatar="avatar" />
+    <Avatar
+      v-for="avatar of avatars"
+      :key="avatar.id"
+      :avatar="avatar"
+      @removeAvatar="removeAvatar"
+    />
   </div>
 </template>
 
@@ -52,9 +57,14 @@ export default {
       this.$set(this.avatars, avatar.id, avatar);
     });
     onRemoveAvatar((id) => {
-      this.$delete(this.avatars, id);
+      this.removeAvatar(id);
     });
   },
+  methods: {
+    removeAvatar(id) {
+      this.$delete(this.avatars, id);
+    }
+  }
 };
 </script>
 

@@ -58,6 +58,13 @@ function handleConnection(socket) {
             socket.emit("avatar", updated)
         }
     })
+
+    socket.on("remove-avatar", (avatarId) => {
+        if (currentRoom) {
+            currentRoom.deleteAvatar(avatarId)
+            socket.broadcast.to(currentRoom.id).emit("remove-avatar", avatarId)
+        }
+    })
 }
 
 module.exports = (server) => {
