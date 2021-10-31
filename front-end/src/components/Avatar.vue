@@ -7,11 +7,16 @@
     <div v-if="!stream || !avatar.video">
       {{ initials }}
     </div>
-    <VideoStream :stream="stream" v-if="stream && avatar.video" />
+    <VideoStream
+      :stream="stream"
+      v-if="stream && avatar.video"
+      :muted="isMyAvatar"
+    />
     <div style="display: none">
       <VideoStream
         :stream="stream"
         v-if="stream && !avatar.video && avatar.audio"
+        :muted="isMyAvatar"
       />
     </div>
   </v-avatar>
@@ -52,14 +57,14 @@ export default {
       }
       return null;
     },
-    draggable() {
+    isMyAvatar() {
       return state.myId === this.avatar.id;
     },
   },
   methods: {
     // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
     onMouseDown(e) {
-      if (!this.draggable) return;
+      if (!this.isMyAvatar) return;
       e.preventDefault();
       document.onmouseup = () => this.onMouseUp();
       document.onmousemove = (e) => this.onMouseMove(e);
@@ -80,7 +85,7 @@ export default {
     },
   },
   beforeDestroy() {
-    if (this.draggable) {
+    if (this.isMyAvatar) {
       removeAvatar(this.avatar.id);
     }
   },

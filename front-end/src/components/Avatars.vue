@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
 import { onAvatar, onRemoveAvatar } from "@/backend/socket";
 import Avatar from "./Avatar.vue";
@@ -22,7 +21,6 @@ export default {
   },
   components: {
     Avatar,
-    // VideoStream,
   },
   computed: {
     initials() {
@@ -56,14 +54,9 @@ export default {
       this.$set(this.avatars, avatar.id, avatar);
     });
     onRemoveAvatar((id) => {
-      this.removeAvatar(id);
+      this.$delete(this.avatars, id);
     });
   },
-  methods: {
-    removeAvatar(id) {
-      this.$delete(this.avatars, id);
-    }
-  }
 };
 </script>
 

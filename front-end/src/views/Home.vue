@@ -58,7 +58,6 @@ export default {
     joinRoom() {
         switchRoom(this.code, this.name);
         this.$router.push('/meeting');
-        console.log("joined");
     }
   },
 

@@ -2,7 +2,7 @@
   <v-container>
     <v-item-group>
       <v-btn
-        :color="drawingOn ? '#1982FC' : '#FFFFFF'"
+        :color="drawingOn ? '#00FF00' : '#FFFFFF'"
         x-large
         icon
         @click="toggleDraw"

@@ -1,12 +1,13 @@
 <template>
-  <video ref="video" />
+  <video ref="video" :muted="muted" />
 </template>
 
 <script>
 export default {
   name: "VideoStream",
   props: {
-    stream: MediaStream
+    stream: MediaStream,
+    muted: Boolean,
   },
   mounted() {
     // console.log(this.$refs.video);
@@ -15,7 +16,7 @@ export default {
     vid.addEventListener("loadedmetadata", () => {
       vid.play();
     });
-  }
+  },
 };
 </script>
 <style>
