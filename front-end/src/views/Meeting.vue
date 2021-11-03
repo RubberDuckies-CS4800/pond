@@ -20,9 +20,10 @@
 <script>
 import { state } from "@/backend/peers";
 // import VideoStream from "@/components/VideoStream";
-import Whiteboard from "../components/Whiteboard.vue";
-import Avatars from "../components/Avatars.vue";
-import UserControls from "../components/UserControls.vue";
+import Whiteboard from "@/components/Whiteboard.vue";
+import Avatars from "@/components/Avatars.vue";
+import UserControls from "@/components/UserControls.vue";
+import { sendLeaveRoom } from '@/backend/socket';
 
 export default {
   components: {
@@ -67,6 +68,10 @@ export default {
     if (state.roomId === null) {
       this.$router.push("/");
     }
+  },
+  beforeDestroy() {
+    console.log("BEFOREDESTROYED")
+    sendLeaveRoom()
   },
 };
 </script>

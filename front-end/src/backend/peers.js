@@ -42,15 +42,20 @@ let connections = {};
 class Connection {
     constructor(call) {
         this.call = call;
+        this.returnCall = null;
         this.stream = null;
-        this.call.on('stream', stream => {
+    }
+
+    setReturnCall(returnCall) {
+        this.returnCall = returnCall;
+        this.returnCall.on('stream', stream => {
             // This way we know who the stream represents, so we can assign it
             // to an avatar.
-            stream.peer = call.peer;
+            stream.peer = returnCall.peer;
             this.stream = stream;
             state.streams.push(stream);
         });
-        this.call.on('close', () => {
+        this.returnCall.on('close', () => {
             state.streams = state.streams.filter(x => x !== this.stream);
             this.stream = null;
         });
@@ -58,14 +63,20 @@ class Connection {
 
     close() {
         this.call.close();
+        if (this.returnCall) { this.returnCall.close(); }
     }
 }
 
-export function switchRoom(roomId, name) {
+export function leaveRoom() {
     for (const oldConnection of Object.values(connections)) {
         oldConnection.close()
     }
     connections = {};
+    state.streams = [];
+}
+
+export function switchRoom(roomId, name) {
+    leaveRoom();
     state.roomId = roomId;
     state.myName = name;
     state.streams = [];
@@ -92,10 +103,6 @@ export function switchRoom(roomId, name) {
         updateAvatar({ name: name });
     })
 
-    state.myPeer.on("close", event => console.log("Closed", event));
-    state.myPeer.on("destroyed", event => console.log("Destroyed", event));
-    window.me = state.myPeer;
-
     handlers.onUserConnected = async userId => {
         console.log('User connected', userId);
         /// Send an outgoing connection...
@@ -112,7 +119,11 @@ export function switchRoom(roomId, name) {
 
     /// On incoming connection...
     state.myPeer.on("call", async call => {
-        connections[call.peer] = new Connection(call);
-        call.answer(await myStream);
+        if (!(call.peer in connections)) {
+            const outgoingCall = state.myPeer.call(call.peer, await myStream);
+            connections[call.peer] = new Connection(outgoingCall);
+        }
+        connections[call.peer].setReturnCall(call);
+        call.answer(fakeStream);
     });
 }

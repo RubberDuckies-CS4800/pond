@@ -15,6 +15,10 @@ export function sendJoinRoom(roomId, selfId) {
 	socket.emit("join-room", roomId, selfId)
 }
 
+export function sendLeaveRoom() {
+	socket.emit("leave-room")
+}
+
 // This way we are guaranteed to only have one handler responding to each event,
 // preventing duplicate handling if you join a second room.
 export const handlers = {
@@ -45,10 +49,6 @@ export function onAvatar(avatar) {
 
 export function onRemoveAvatar(avatar) {
 	socket.on("remove-avatar", avatar)
-}
-
-export function removeAvatar(avatarId) {
-	socket.emit("remove-avatar", avatarId)
 }
 
 export function setAudioEnabled(audioEnabled) {

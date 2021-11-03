@@ -25,7 +25,7 @@
 <script>
 import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
-import { updateAvatar, removeAvatar } from "@/backend/socket";
+import { updateAvatar } from "@/backend/socket";
 
 export default {
   components: { VideoStream },
@@ -83,11 +83,6 @@ export default {
       document.onmouseup = null;
       document.onmousemove = null;
     },
-  },
-  beforeDestroy() {
-    if (this.isMyAvatar) {
-      removeAvatar(this.avatar.id);
-    }
   },
 };
 </script>
