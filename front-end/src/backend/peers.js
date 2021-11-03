@@ -1,4 +1,4 @@
-import Peer from 'peerjs-client';
+import Peer from 'peerjs';
 import Vue from 'vue';
 import { sendJoinRoom, handlers, updateAvatar } from './socket';
 
