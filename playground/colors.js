@@ -11,7 +11,12 @@ const colors = [
     { r: 93, g: 129, b: 199 }
 ];
 
-let colorIndex = Math.floor(Math.random() * colors.length);
-let randColor = colors[colorIndex];
+function getRandColor() {
+    let colorIndex = Math.floor(Math.random() * colors.length);
+    let randColor = colors[colorIndex];
+    return randColor;
+}
+
+let randColor = getRandColor();
 
 console.log(`Red: ${randColor.r}, Green: ${randColor.g}, Blue: ${randColor.b}`);
