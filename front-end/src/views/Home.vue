@@ -38,7 +38,7 @@
       </v-card>
     </v-container>
     <div id="host_meeting_wrapper" flex align="center" justify="center">
-      <v-btn id="host_meeting_btn" rounded texts @click="hostMeeting"> Host Meeting </v-btn>
+      <v-btn id="host_meeting_btn" rounded @click="hostMeeting"> Host Meeting </v-btn>
     </div>
   </div>
 </template>
