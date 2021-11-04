@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      cameraOn: true,
+      cameraOn: false,
       whiteboardActive: true,
     };
   },

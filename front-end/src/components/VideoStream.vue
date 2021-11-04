@@ -1,5 +1,8 @@
 <template>
-  <video ref="video" :muted="muted" />
+  <div>
+    <video ref="video" :muted="muted" :volume="volume" />
+    <h1>volume: {{ volume }}</h1>
+  </div>
 </template>
 
 <script>
@@ -8,6 +11,7 @@ export default {
   props: {
     stream: MediaStream,
     muted: Boolean,
+    volume: Number,
   },
   mounted() {
     // console.log(this.$refs.video);
