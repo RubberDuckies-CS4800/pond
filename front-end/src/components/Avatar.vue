@@ -1,34 +1,47 @@
 <template>
-  <v-avatar
-    size="120"
-    :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
-    @mousedown="onMouseDown($event)"
-  >
-    <div v-if="!stream || !avatar.video">
-      {{ initials }}
-    </div>
-    <VideoStream
-      :stream="stream"
-      v-if="stream && avatar.video"
-      :muted="isMyAvatar"
-    />
-    <div style="display: none">
+  <div>
+    <v-avatar
+      size="120"
+      :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px; position: absolute;`"
+      @mousedown="onMouseDown($event)"
+      @click.right="toggleAvatarMenu"
+    >
+      <div v-if="!stream || !avatar.video">
+        {{ initials }}
+      </div>
       <VideoStream
         :stream="stream"
-        v-if="stream && !avatar.video && avatar.audio"
+        v-if="stream && avatar.video"
         :muted="isMyAvatar"
       />
-    </div>
-  </v-avatar>
+      <div style="display: none">
+        <VideoStream
+          :stream="stream"
+          v-if="stream && !avatar.video && avatar.audio"
+          :muted="isMyAvatar"
+        />
+      </div>
+    </v-avatar>
+    <AvatarMenu
+      v-if="avatarMenuOn"
+      :name="avatar.name"
+      :initials="initials"
+      :style="`height: 300px; width: 300px; top: ${avatar.top}px; left:${avatar.left}px; position: absolute;`"
+    />
+  </div>
 </template>
 
 <script>
 import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
 import { updateAvatar, removeAvatar } from "@/backend/socket";
+import AvatarMenu from "./AvatarMenu.vue";
 
 export default {
-  components: { VideoStream },
+  components: {
+    VideoStream,
+    AvatarMenu,
+  },
   props: {
     avatar: Object,
   },
@@ -36,6 +49,7 @@ export default {
     return {
       dragOffsetX: 0.0,
       dragOffsetY: 0.0,
+      avatarMenuOn: false,
     };
   },
   computed: {
@@ -61,7 +75,19 @@ export default {
       return state.myId === this.avatar.id;
     },
   },
+  mounted() {
+    window.addEventListener(
+      "contextmenu",
+      (e) => {
+        e.preventDefault();
+      },
+      false
+    );
+  },
   methods: {
+    toggleAvatarMenu() {
+      this.avatarMenuOn = !this.avatarMenuOn;
+    },
     // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
     onMouseDown(e) {
       if (!this.isMyAvatar) return;
@@ -78,7 +104,6 @@ export default {
         top: e.clientY - this.dragOffsetY,
       });
     },
-
     onMouseUp() {
       document.onmouseup = null;
       document.onmousemove = null;
@@ -91,3 +116,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-avatar {
+  background: rgb(17, 204, 157);
+}
+</style>
