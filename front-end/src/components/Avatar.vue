@@ -6,8 +6,8 @@
         <template v-slot:activator="{ on }">
           <v-avatar
             size="120"
-            :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px; position: absolute;`"
-            v-on="on"
+            :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
+            @contextmenu.prevent="on.click"
             @mousedown="onMouseDown($event)"
           >
             <div v-if="!stream || !avatar.video || !enableVideo">
@@ -125,15 +125,6 @@ export default {
     scaledVolume() {
       return this.volume / 100;
     },
-  },
-  mounted() {
-    window.addEventListener(
-      "contextmenu",
-      (e) => {
-        e.preventDefault();
-      },
-      false
-    );
   },
   methods: {
     // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
