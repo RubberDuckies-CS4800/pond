@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- checking if the avatar is being added to the data -->
+    <h4>{{ avatars }}</h4>
+    
     <Avatar
       v-for="avatar of avatars"
       :key="avatar.id"

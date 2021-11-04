@@ -1,10 +1,12 @@
 <template>
   <v-container fluid style="height: 300px">
+
     <v-row justify="center">
       <!-- <h1>volume: {{ scaledVolume }}</h1> -->
       <v-menu bottom rounded offset-y :close-on-content-click="false">
         <template v-slot:activator="{ on }">
           <v-avatar
+            :class="{ isMyAvatar: isMyAvatar }"
             size="120"
             :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
             @contextmenu.prevent="on.click"
@@ -30,7 +32,7 @@
           </v-avatar>
         </template>
 
-        <v-card style="width: 200px; padding: 5px">
+        <v-card class="avatar-card" style="width: 200px; padding: 5px">
           <v-container>
             <v-list-item-content class="justify-center">
               <div class="mx-auto text-center">
@@ -176,5 +178,13 @@ export default {
 <style scoped>
 .v-avatar {
   background: rgb(17, 204, 157);
+  z-index: 10;
+}
+.isMyAvatar {
+  z-index: 20;
+  background: rgb(0, 183, 255);
+}
+.avatar-card {
+  z-index: 30;
 }
 </style>
