@@ -26,5 +26,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  z-index: -1; // might mess things up
 }
 </style>
