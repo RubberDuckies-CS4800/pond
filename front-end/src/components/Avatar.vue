@@ -1,6 +1,5 @@
 <template>
   <v-container fluid style="height: 300px">
-
     <v-row justify="center">
       <!-- <h1>volume: {{ scaledVolume }}</h1> -->
       <v-menu bottom rounded offset-y :close-on-content-click="false">
@@ -11,6 +10,7 @@
             :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
             @contextmenu.prevent="on.click"
             @mousedown="onMouseDown($event)"
+            :color="`rgb(${color.r},${color.g},${color.b})`"
           >
             <div v-if="!stream || !avatar.video || !enableVideo">
               {{ initials }}
@@ -36,7 +36,7 @@
           <v-container>
             <v-list-item-content class="justify-center">
               <div class="mx-auto text-center">
-                <v-avatar color="brown">
+                <v-avatar :color="`rgb(${color.r},${color.g},${color.b})`">
                   <span class="white--text text-h7">{{ initials }}</span>
                 </v-avatar>
                 <v-spacer></v-spacer>
@@ -83,6 +83,7 @@ import { state } from "@/backend/peers";
 import { updateAvatar, removeAvatar } from "@/backend/socket";
 // import AvatarMenu from "./AvatarMenu.vue";
 
+
 export default {
   components: {
     VideoStream,
@@ -99,8 +100,12 @@ export default {
       volumePrev: 50,
       volumeIcon: "mdi-volume-high",
       enableVideo: true,
+      color: null,
       // avatarMenuOn: false,
     };
+  },
+  mounted() {
+    this.color = this.getRandColor();
   },
   computed: {
     initials() {
@@ -129,6 +134,24 @@ export default {
     },
   },
   methods: {
+    getRandColor() {
+      const colors = [
+        { r: 93, g: 111, b: 199 },
+        { r: 164, g: 93, b: 199 },
+        { r: 199, g: 93, b: 151 },
+        { r: 199, g: 93, b: 93 },
+        { r: 199, g: 153, b: 93 },
+        { r: 178, g: 199, b: 93 },
+        { r: 104, g: 199, b: 93 },
+        { r: 93, g: 199, b: 164 },
+        { r: 93, g: 180, b: 199 },
+        { r: 93, g: 129, b: 199 },
+      ];
+
+      let colorIndex = Math.floor(Math.random() * colors.length);
+      let randColor = colors[colorIndex];
+      return randColor;
+    },
     // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
     onMouseDown(e) {
       if (!this.isMyAvatar) return;
@@ -177,12 +200,10 @@ export default {
 
 <style scoped>
 .v-avatar {
-  background: rgb(17, 204, 157);
   z-index: 10;
 }
 .isMyAvatar {
   z-index: 20;
-  background: rgb(0, 183, 255);
 }
 .avatar-card {
   z-index: 30;
