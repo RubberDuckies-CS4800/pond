@@ -80,9 +80,7 @@
 <script>
 import VideoStream from "@/components/VideoStream";
 import { state } from "@/backend/peers";
-import { updateAvatar, removeAvatar } from "@/backend/socket";
-// import AvatarMenu from "./AvatarMenu.vue";
-
+import { updateAvatar } from "@/backend/socket";
 
 export default {
   components: {
@@ -189,11 +187,6 @@ export default {
         this.volumeIcon = "mdi-volume-high";
       }
     },
-  },
-  beforeDestroy() {
-    if (this.isMyAvatar) {
-      removeAvatar(this.avatar.id);
-    }
   },
 };
 </script>

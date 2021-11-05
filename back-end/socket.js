@@ -6,6 +6,21 @@ function handleConnection(socket) {
     let currentRoom = null
     let userId = null
 
+    function leaveRoom() {
+        if (currentRoom) {
+            const roomId = currentRoom.id;
+            socket.broadcast.to(roomId).emit("user-disconnected", userId)
+            if (userId) {
+                currentRoom.deleteAvatar(roomId);
+                socket.broadcast.to(roomId).emit("remove-avatar", userId)
+            }
+
+            if (_.isEmpty(currentRoom.avatars)) {
+                currentRoom.figures = []
+            }
+        }
+    }
+
     socket.on("join-room", (roomId, theUserId) => {
         userId = theUserId
         currentRoom = getRoom(roomId)
@@ -34,14 +49,12 @@ function handleConnection(socket) {
 
         socket.on("disconnect", () => {
             console.log("Socket disconnected!")
-            socket.broadcast.to(roomId).emit("user-disconnected", userId)
-            currentRoom.deleteAvatar(userId);
-            socket.broadcast.to(roomId).emit("remove-avatar", userId)
-
-            if (_.isEmpty(currentRoom.avatars)) {
-                currentRoom.figures = []
-            }
+            leaveRoom()
         })
+    })
+
+    socket.on("leave-room", () => {
+        leaveRoom()
     })
 
     socket.on("whiteboard-figure", (fig) => {
