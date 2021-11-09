@@ -19,7 +19,7 @@
     />
     <v-container flex align="center" justify="center">
       <v-card flex class="meeting_input mx-auto px-auto" outlined>
-        <v-text-field placeholder="Enter Meeting Code" v-model="code" solo></v-text-field>
+        <v-text-field id="textField" placeholder="Enter Meeting Code" @click="filter" v-model="code" solo></v-text-field>
         <v-card-actions class="submit">
           <v-btn outlined rounded text @click="submitCode"> Submit </v-btn>
         </v-card-actions>
@@ -43,6 +43,8 @@
 <script>
 // @ is an alias to /src
 import { switchRoom } from "../backend/peers"
+import { setInputFilter } from "../filter"
+
 export default {
   data() {
     return {
@@ -52,6 +54,11 @@ export default {
     }
   },
   methods: {
+    filter(){
+      let txtBox = document.getElementById("textField");
+      let property = Object.prototype.hasOwnProperty.call(txtBox, "oldValue");
+      setInputFilter(txtBox, property)
+    },
     submitCode() {
       this.reveal = true;
     },
@@ -60,8 +67,7 @@ export default {
         this.$router.push('/meeting');
         console.log("joined");
     }
-  },
-
+  }
 }
 </script>
 <style scoped>
