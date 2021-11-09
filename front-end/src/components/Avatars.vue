@@ -14,7 +14,7 @@
 <script>
 import { state } from "@/backend/peers";
 import { onAvatar, onRemoveAvatar } from "@/backend/socket";
-import Avatar from "./Avatar.vue";
+import Avatar from "@/components/Avatar.vue";
 
 export default {
   props: {

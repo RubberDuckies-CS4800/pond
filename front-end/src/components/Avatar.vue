@@ -2,7 +2,13 @@
   <v-container fluid style="height: 300px">
     <v-row justify="center">
       <!-- <h1>volume: {{ scaledVolume }}</h1> -->
-      <v-menu bottom rounded offset-y :close-on-content-click="false" z-index="50">
+      <v-menu
+        bottom
+        rounded
+        offset-y
+        :close-on-content-click="false"
+        z-index="50"
+      >
         <template v-slot:activator="{ on }">
           <v-avatar
             :class="{ isMyAvatar: isMyAvatar }"
@@ -33,44 +39,11 @@
         </template>
 
         <v-card class="avatar-card" style="width: 200px; padding: 5px">
-          <v-container>
-            <v-list-item-content class="justify-center">
-              <div class="mx-auto text-center">
-                <v-avatar :color="`rgb(${color.r},${color.g},${color.b})`">
-                  <span class="white--text text-h7">{{ initials }}</span>
-                </v-avatar>
-                <v-spacer></v-spacer>
-                <h3>{{ avatar.name }}</h3>
-                <div v-if="!isMyAvatar">
-                  <v-divider class="my-3"></v-divider>
-                  <caption class="text-thing">
-                    Volume
-                  </caption>
-                  <!-- <v-container> -->
-                  <v-slider
-                    v-model="volume"
-                    thumb-label
-                    thumb-size="32"
-                    :prepend-icon="volumeIcon"
-                    @click:prepend="mute"
-                    @change="checkIfMute"
-                  ></v-slider>
-                  <!-- </v-container> -->
-                  <caption align="left">
-                    Video
-                  </caption>
-
-                  <v-switch
-                    v-model="enableVideo"
-                    prepend-icon="mdi-video"
-                  ></v-switch>
-
-                  <v-divider class="my-3"></v-divider>
-                  <v-btn depressed rounded text disabled>Kick User</v-btn>
-                </div>
-              </div>
-            </v-list-item-content>
-          </v-container>
+          <AvatarMenu
+            :avatar="avatar"
+            :color="color"
+            @changeVolume="changeVolume"
+          />
         </v-card>
       </v-menu>
     </v-row>
@@ -79,13 +52,14 @@
 
 <script>
 import VideoStream from "@/components/VideoStream";
+import AvatarMenu from "@/components/AvatarMenu";
 import { state } from "@/backend/peers";
 import { updateAvatar } from "@/backend/socket";
 
 export default {
   components: {
     VideoStream,
-    // AvatarMenu,
+    AvatarMenu,
   },
   props: {
     avatar: Object,
@@ -95,11 +69,7 @@ export default {
       dragOffsetX: 0.0,
       dragOffsetY: 0.0,
       volume: 50,
-      volumePrev: 50,
-      volumeIcon: "mdi-volume-high",
-      enableVideo: true,
       color: null,
-      // avatarMenuOn: false,
     };
   },
   mounted() {
@@ -150,7 +120,6 @@ export default {
       let randColor = colors[colorIndex];
       return randColor;
     },
-    // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
     onMouseDown(e) {
       if (!this.isMyAvatar) return;
       e.preventDefault();
@@ -170,22 +139,8 @@ export default {
       document.onmouseup = null;
       document.onmousemove = null;
     },
-    mute() {
-      if (this.volume == 0) {
-        this.volume = this.volumePrev;
-        this.volumeIcon = "mdi-volume-high";
-      } else {
-        this.volumePrev = this.volume;
-        this.volume = 0;
-        this.volumeIcon = "mdi-volume-mute";
-      }
-    },
-    checkIfMute() {
-      if (this.volume == 0) {
-        this.volumeIcon = "mdi-volume-mute";
-      } else {
-        this.volumeIcon = "mdi-volume-high";
-      }
+    changeVolume(volume) {
+      this.volume = volume;
     },
   },
 };
