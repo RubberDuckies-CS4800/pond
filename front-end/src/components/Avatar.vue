@@ -18,23 +18,11 @@
             @mousedown="onMouseDown($event)"
             :color="`rgb(${color.r},${color.g},${color.b})`"
           >
-            <div v-if="!stream || !avatar.video || !enableVideo">
-              {{ initials }}
-            </div>
-            <VideoStream
-              :stream="stream"
-              v-if="stream && avatar.video && (enableVideo || isMyAvatar)"
-              :muted="isMyAvatar || volume == 0"
-              :volume="scaledVolume"
+            <AvatarInside
+              :avatar="avatar"
+              :initials="initials"
+              :volume="volume"
             />
-            <div style="display: none">
-              <VideoStream
-                :stream="stream"
-                v-if="stream && !avatar.video && avatar.audio"
-                :muted="isMyAvatar || volume == 0"
-                :volume="scaledVolume"
-              />
-            </div>
           </v-avatar>
         </template>
 
@@ -54,14 +42,14 @@
 </template>
 
 <script>
-import VideoStream from "@/components/VideoStream";
+import AvatarInside from "@/components/AvatarInside";
 import AvatarMenu from "@/components/AvatarMenu";
 import { state } from "@/backend/peers";
 import { updateAvatar } from "@/backend/socket";
 
 export default {
   components: {
-    VideoStream,
+    AvatarInside,
     AvatarMenu,
   },
   props: {
@@ -73,7 +61,7 @@ export default {
       dragOffsetY: 0.0,
       volume: 50,
       enableVideo: true,
-      color: null,
+      color: { r: 93, g: 111, b: 199 },
     };
   },
   mounted() {
@@ -89,14 +77,6 @@ export default {
           .join(". ")
           .toUpperCase() + "."
       );
-    },
-    stream() {
-      for (const stream of state.streams) {
-        if (stream.peer.indexOf(this.avatar.id) !== -1) {
-          return stream;
-        }
-      }
-      return null;
     },
     isMyAvatar() {
       return state.myId === this.avatar.id;
@@ -148,6 +128,11 @@ export default {
     },
     setEnableVideo(value) {
       this.enableVideo = value;
+    },
+  },
+  updated() {
+    if (this.isMyAvatar) {
+      this.volume = 0; // prevents you from hearing yourself (might take a second to complete)
     }
   },
 };
