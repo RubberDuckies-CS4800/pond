@@ -40,9 +40,12 @@
 
         <v-card class="avatar-card" style="width: 200px; padding: 5px">
           <AvatarMenu
-            :avatar="avatar"
+            :name="avatar.name"
+            :initials="initials"
             :color="color"
+            :isMyAvatar="isMyAvatar"
             @changeVolume="changeVolume"
+            @setEnableVideo="setEnableVideo"
           />
         </v-card>
       </v-menu>
@@ -69,6 +72,7 @@ export default {
       dragOffsetX: 0.0,
       dragOffsetY: 0.0,
       volume: 50,
+      enableVideo: true,
       color: null,
     };
   },
@@ -142,6 +146,9 @@ export default {
     changeVolume(volume) {
       this.volume = volume;
     },
+    setEnableVideo(value) {
+      this.enableVideo = value;
+    }
   },
 };
 </script>

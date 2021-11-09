@@ -6,7 +6,7 @@
           <span class="white--text text-h7">{{ initials }}</span>
         </v-avatar>
         <v-spacer></v-spacer>
-        <h3>{{ avatar.name }}</h3>
+        <h3>{{ name }}</h3>
         <div v-if="!isMyAvatar">
           <v-divider class="my-3"></v-divider>
           <caption class="text-thing">
@@ -26,7 +26,7 @@
             Video
           </caption>
 
-          <v-switch v-model="enableVideo" prepend-icon="mdi-video"></v-switch>
+          <v-switch v-model="enableVideo" prepend-icon="mdi-video" @click="setEnableVideo"></v-switch>
 
           <v-divider class="my-3"></v-divider>
           <v-btn depressed rounded text disabled>Kick User</v-btn>
@@ -39,8 +39,10 @@
 <script>
 export default {
   props: {
-    avatar: Object,
+    name: String,
+    initials: String,
     color: Object,
+    isMyAvatar: Boolean,
   },
   data: () => ({
     volume: 50,
@@ -52,11 +54,9 @@ export default {
     mute() {
       if (this.volume == 0) {
         this.volume = this.volumePrev;
-        // this.volumeIcon = "mdi-volume-high";
       } else {
         this.volumePrev = this.volume;
         this.volume = 0;
-        // this.volumeIcon = "mdi-volume-mute";
       }
       this.checkIfMute();
       this.$emit("changeVolume", this.volume);
@@ -72,6 +72,9 @@ export default {
         this.volumeIcon = "mdi-volume-high";
       }
     },
+    setEnableVideo() {
+      this.$emit("setEnableVideo", this.enableVideo);
+    }
   },
 };
 </script>
