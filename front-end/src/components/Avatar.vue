@@ -2,7 +2,7 @@
   <v-container fluid style="height: 300px">
     <v-row justify="center">
       <!-- <h1>volume: {{ scaledVolume }}</h1> -->
-      <v-menu bottom rounded offset-y :close-on-content-click="false">
+      <v-menu bottom rounded offset-y :close-on-content-click="false" z-index="50">
         <template v-slot:activator="{ on }">
           <v-avatar
             :class="{ isMyAvatar: isMyAvatar }"
