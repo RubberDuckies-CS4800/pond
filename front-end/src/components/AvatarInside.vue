@@ -15,26 +15,26 @@
                 AND
             2. a video
                 AND
-            3. the video has not been disabled  -->
+            3. video has not been disabled  -->
     <VideoStream
       :stream="stream"
       v-if="stream && avatar.video && enableVideo"
-      :muted="volume == 0"
-      :volume="scaledVolume"
+      :muted="volume == 0 || !this.avatar.audio"
+      :volume="volume"
     />
 
     <!-- play the audio only if there is:
             1. a stream
                 AND
-            2. no video
+            2. no video OR (a video AND video has been disabled)
                 AND
             3. an audio -->
     <div style="display: none">
       <VideoStream
         :stream="stream"
-        v-if="stream && !avatar.video && avatar.audio"
+        v-if="stream && (!avatar.video || (avatar.video && !enableVideo)) && avatar.audio"
         :muted="volume == 0"
-        :volume="scaledVolume"
+        :volume="volume"
       />
     </div>
   </div>
@@ -52,6 +52,7 @@ export default {
     avatar: Object,
     initials: String,
     volume: Number,
+    enableVideo: Boolean,
   },
   computed: {
     stream() {

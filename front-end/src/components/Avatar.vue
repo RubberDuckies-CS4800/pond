@@ -21,7 +21,8 @@
             <AvatarInside
               :avatar="avatar"
               :initials="initials"
-              :volume="volume"
+              :volume="scaledVolume"
+              :enableVideo="enableVideo"
             />
           </v-avatar>
         </template>
