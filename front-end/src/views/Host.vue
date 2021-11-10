@@ -5,14 +5,21 @@
             <h1 id="copy_meeting"> {{ generateRoomId() }} </h1>
             <v-btn id="copy_meeting_id_btn" rounded @click='copyMeetingId'> Copy </v-btn>
         </div>
-        <div id="host_join_wrapper" flex align="center" justify="center">
-            <v-btn id="join_meeting_host_btn" rounded > Join Meeting As Host </v-btn>
+        <div id="host_join_wrapper" align="center" justify="center">
+            <v-text-field id="host_name" placeholder="Name" solo @input='validateName'></v-text-field>
+            <v-btn :disabled="checkName" id="join_meeting_host_btn" rounded @click="joinRoom"> Join Meeting As Host </v-btn>
         </div>
   </div>
   
 </template>
 <script>
+import { switchRoom } from "../backend/peers"
 export default {
+    data() {
+        return {
+        checkName: true
+        }
+    },
     methods: {
          generateRoomId() {
             var meetingCode = '';
@@ -23,6 +30,7 @@ export default {
             return meetingCode;
         },
         copyMeetingId() {
+            console.log("meeting code copied")
             var text = document.getElementById("copy_meeting").innerText;
             var elem = document.createElement("textarea");
             document.body.appendChild(elem);
@@ -30,6 +38,17 @@ export default {
             elem.select();
             document.execCommand("copy");
             document.body.removeChild(elem);
+        },
+        joinRoom() {
+            switchRoom(document.getElementById("copy_meeting").innerText, document.getElementById("host_name").value);
+            this.$router.push('/meeting');
+        },
+        validateName() {
+            if(document.getElementById("host_name").value.length > 0) {
+                this.checkName = false
+            } else {
+                this.checkName = true
+            }
         }
     }
 }
@@ -46,7 +65,6 @@ export default {
 
 #host_join_wrapper {
   width: 100%;
-  display: flex;
   align-items: center;
   justify-content: center;
   bottom: 0;
@@ -64,5 +82,16 @@ h2 {
 
 h1 {
     font-size: xxx-large;
+}
+
+#host_name {
+    width: 30%;
+    align-items: center;
+    justify-content: center;
+    padding: 10%;
+}
+
+.v-input {
+    width: 30%
 }
 </style>
