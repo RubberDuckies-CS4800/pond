@@ -12,12 +12,14 @@
       :stream="stream"
       v-if="stream && avatar.video"
       :muted="isMyAvatar"
+      @talking="talking = $event"
     />
     <div style="display: none">
       <VideoStream
         :stream="stream"
         v-if="stream && !avatar.video && avatar.audio"
         :muted="isMyAvatar"
+        @talking="talking = $event"
       />
     </div>
   </v-avatar>
