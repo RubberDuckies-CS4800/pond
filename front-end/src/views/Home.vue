@@ -37,6 +37,9 @@
         </v-expand-transition>
       </v-card>
     </v-container>
+    <div id="host_meeting_wrapper" flex align="center" justify="center">
+      <v-btn id="host_meeting_btn" rounded @click="hostMeeting"> Host Meeting </v-btn>
+    </div>
   </div>
 </template>
 
@@ -56,8 +59,11 @@ export default {
       this.reveal = true;
     },
     joinRoom() {
-        switchRoom(this.code, this.name);
+        switchRoom(this.code, this.name, false);
         this.$router.push('/meeting');
+    },
+    hostMeeting() {
+        this.$router.push('/host');
     }
   },
 
@@ -376,5 +382,17 @@ export default {
 
 .company_logo {
   width: 30%;
+}
+
+#host_meeting_wrapper {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  top: 80%;
+  position: absolute;
+}
+
+#host_meeting_btn {
+  background-color: orange;
 }
 </style>

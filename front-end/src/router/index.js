@@ -23,6 +23,11 @@ const routes = [
     name: 'Meeting',
     component: () => import('../views/Meeting.vue')
   },
+  {
+    path: '/host',
+    name: 'Host',
+    component: () => import('../views/Host.vue')
+  },
 ]
 
 const router = new VueRouter({
