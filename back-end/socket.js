@@ -11,7 +11,8 @@ function handleConnection(socket) {
             const roomId = currentRoom.id;
             socket.broadcast.to(roomId).emit("user-disconnected", userId)
             if (userId) {
-                currentRoom.deleteAvatar(roomId);
+                currentRoom.deleteAvatar(userId);
+                console.log(currentRoom.avatars);
                 socket.broadcast.to(roomId).emit("remove-avatar", userId)
             }
 
