@@ -6,6 +6,8 @@
   >
     <div v-if="!stream || !avatar.video">
       {{ initials }}
+      <br>
+      isHost: {{ avatar.isHost }}
     </div>
     <VideoStream
       :stream="stream"

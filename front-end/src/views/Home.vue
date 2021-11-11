@@ -59,7 +59,7 @@ export default {
       this.reveal = true;
     },
     joinRoom() {
-        switchRoom(this.code, this.name);
+        switchRoom(this.code, this.name, false);
         this.$router.push('/meeting');
     },
     hostMeeting() {
@@ -386,12 +386,10 @@ export default {
 
 #host_meeting_wrapper {
   width: 100%;
-  display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0;
+  top: 80%;
   position: absolute;
-  padding: 10%;
 }
 
 #host_meeting_btn {
