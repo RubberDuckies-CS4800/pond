@@ -9,13 +9,47 @@ export default {
     stream: MediaStream,
     muted: Boolean,
   },
+  data() {
+    return {
+      isMounted: false,
+    };
+  },
+  methods: {
+    updateMeter() {
+      const array = new Uint8Array(this.analyser.fftSize);
+      this.analyser.getByteTimeDomainData(array);
+      let max = 0;
+      for (let a of array) {
+        a = Math.abs(a - 128);
+        max = Math.max(max, a);
+      }
+
+      this.$emit('talking', max > 4);
+
+      if (this.isMounted)
+        window.requestAnimationFrame(() => this.updateMeter());
+    },
+  },
   mounted() {
-    // console.log(this.$refs.video);
+    this.isMounted = true;
+
     const vid = this.$refs.video;
     vid.srcObject = this.stream;
     vid.addEventListener("loadedmetadata", () => {
       vid.play();
     });
+
+    const ctx = new AudioContext();
+    const src = ctx.createMediaStreamSource(this.stream);
+    window.src = src;
+    const analyser = ctx.createAnalyser();
+    src.connect(analyser);
+
+    this.analyser = analyser;
+    this.updateMeter();
+  },
+  beforeUnmount() {
+    this.isMounted = false;
   },
 };
 </script>

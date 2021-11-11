@@ -2,6 +2,7 @@
   <v-avatar
     size="120"
     :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
+    :class="{ talking }"
     @mousedown="onMouseDown($event)"
   >
     <div v-if="!stream || !avatar.video">
@@ -36,6 +37,7 @@ export default {
     return {
       dragOffsetX: 0.0,
       dragOffsetY: 0.0,
+      talking: false,
     };
   },
   computed: {
@@ -86,3 +88,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.talking {
+  border: 0.3rem solid lime;
+}
+</style>
