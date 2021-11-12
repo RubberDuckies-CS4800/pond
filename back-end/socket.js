@@ -6,7 +6,22 @@ function handleConnection(socket) {
     let currentRoom = null
     let userId = null
 
-    socket.on("join-room", (roomId, theUserId) => {
+    function leaveRoom() {
+        if (currentRoom) {
+            const roomId = currentRoom.id;
+            socket.broadcast.to(roomId).emit("user-disconnected", userId)
+            if (userId) {
+                currentRoom.deleteAvatar(userId);
+                socket.broadcast.to(roomId).emit("remove-avatar", userId)
+            }
+
+            if (_.isEmpty(currentRoom.avatars)) {
+                currentRoom.figures = []
+            }
+        }
+    }
+
+    socket.on("join-room", (roomId, theUserId, isHost) => {
         userId = theUserId
         currentRoom = getRoom(roomId)
         socket.join(roomId)
@@ -23,6 +38,7 @@ function handleConnection(socket) {
             left: 8.0,
             audio: false,
             video: false,
+            isHost: isHost
         }
         for (const avatar of Object.values(currentRoom.avatars)) {
             socket.emit("avatar", avatar)
@@ -34,14 +50,12 @@ function handleConnection(socket) {
 
         socket.on("disconnect", () => {
             console.log("Socket disconnected!")
-            socket.broadcast.to(roomId).emit("user-disconnected", userId)
-            currentRoom.deleteAvatar(userId);
-            socket.broadcast.to(roomId).emit("remove-avatar", userId)
-
-            if (_.isEmpty(currentRoom.avatars)) {
-                currentRoom.figures = []
-            }
+            leaveRoom()
         })
+    })
+
+    socket.on("leave-room", () => {
+        leaveRoom()
     })
 
     socket.on("whiteboard-figure", (fig) => {
@@ -56,6 +70,17 @@ function handleConnection(socket) {
             const updated = currentRoom.updateAvatar({ id: userId, ...avatar })
             socket.broadcast.to(currentRoom.id).emit("avatar", updated)
             socket.emit("avatar", updated)
+        }
+    })
+
+    socket.on("remove-avatar", (avatarId) => {
+        if (currentRoom) {
+            currentRoom.deleteAvatar(avatarId)
+            socket.broadcast.to(currentRoom.id).emit("remove-avatar", avatarId)
+
+            if (_.isEmpty(currentRoom.avatars)) {
+                currentRoom.figures = []
+            }
         }
     })
 }

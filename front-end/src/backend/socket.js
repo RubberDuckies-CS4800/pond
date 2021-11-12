@@ -10,9 +10,13 @@ socket.on("connect_error", (err) => {
 	console.log(`connect_error due to ${err.message}`)
 })
 
-export function sendJoinRoom(roomId, selfId) {
+export function sendJoinRoom(roomId, selfId, isHost) {
 	console.log("Joining room", roomId, "as", selfId)
-	socket.emit("join-room", roomId, selfId)
+	socket.emit("join-room", roomId, selfId, isHost)
+}
+
+export function sendLeaveRoom() {
+	socket.emit("leave-room")
 }
 
 // This way we are guaranteed to only have one handler responding to each event,

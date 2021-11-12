@@ -5,11 +5,16 @@
     <p v-if="!myStreamIsOk">
       You have not given Pond permission to use your microphone or webcam
     </p>
-    <Whiteboard />
+    <Whiteboard :whiteboardActive="whiteboardActive" />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
     <Avatars :name="myName" :roomId="roomId" :cameraOn="cameraOn" />
+
+    
     <div id="user_controls">
-      <UserControls @toggle_cam="toggleCam" />
+      <UserControls
+        @toggle_cam="toggleCam"
+        @setWhiteboardActive="setWhiteboardActive"
+      />
     </div>
   </div>
 </template>
@@ -17,9 +22,10 @@
 <script>
 import { state } from "@/backend/peers";
 // import VideoStream from "@/components/VideoStream";
-import Whiteboard from "../components/Whiteboard.vue";
-import Avatars from "../components/Avatars.vue";
-import UserControls from '../components/UserControls.vue';
+import Whiteboard from "@/components/Whiteboard.vue";
+import Avatars from "@/components/Avatars.vue";
+import UserControls from "@/components/UserControls.vue";
+import { sendLeaveRoom } from '@/backend/socket';
 
 export default {
   components: {
@@ -30,7 +36,8 @@ export default {
   },
   data() {
     return {
-      cameraOn: true,
+      cameraOn: false,
+      whiteboardActive: true,
     };
   },
   name: "Meeting",
@@ -40,6 +47,9 @@ export default {
   methods: {
     toggleCam(e) {
       this.cameraOn = e;
+    },
+    setWhiteboardActive(whiteboardActive) {
+      this.whiteboardActive = whiteboardActive;
     },
   },
   computed: {
@@ -60,6 +70,10 @@ export default {
     if (state.roomId === null) {
       this.$router.push("/");
     }
+  },
+  beforeDestroy() {
+    console.log("BEFOREDESTROYED")
+    sendLeaveRoom()
   },
 };
 </script>

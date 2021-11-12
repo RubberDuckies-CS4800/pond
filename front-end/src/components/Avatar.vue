@@ -1,36 +1,76 @@
 <template>
-  <v-avatar
-    size="120"
-    :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
-    @mousedown="onMouseDown($event)"
-  >
-    <div v-if="!stream || !avatar.video">
-      {{ initials }}
-    </div>
-    <VideoStream :stream="stream" v-if="stream && avatar.video" />
-    <div style="display: none;">
-      <VideoStream :stream="stream" v-if="stream && !avatar.video && avatar.audio" />
-    </div>
-  </v-avatar>
+  <v-container fluid style="height: 300px">
+    <v-row justify="center">
+      <!-- <h1>volume: {{ scaledVolume }}</h1> -->
+      <v-menu
+        bottom
+        rounded
+        offset-y
+        :close-on-content-click="false"
+        z-index="50"
+      >
+        <template v-slot:activator="{ on }">
+          <v-avatar
+            :class="{ isMyAvatar: isMyAvatar, talking: talking }"
+            size="120"
+            :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
+            @contextmenu.prevent="on.click"
+            @mousedown="onMouseDown($event)"
+            :color="`rgb(${color.r},${color.g},${color.b})`"
+          >
+            <AvatarInside
+              :avatar="avatar"
+              :initials="initials"
+              :volume="scaledVolume"
+              :enableVideo="enableVideo"
+              @talking="setTalking($event)"
+            />
+          </v-avatar>
+        </template>
+
+        <v-card class="avatar-card" style="width: 200px; padding: 5px">
+          <AvatarMenu
+            :name="avatar.name"
+            :initials="initials"
+            :color="color"
+            :isMyAvatar="isMyAvatar"
+            :hostPrivilege="isHost"
+            @changeVolume="changeVolume"
+            @setEnableVideo="setEnableVideo"
+          />
+        </v-card>
+      </v-menu>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-// import VideoStream from "@/components/VideoStream";
+import AvatarInside from "@/components/AvatarInside";
+import AvatarMenu from "@/components/AvatarMenu";
 import { state } from "@/backend/peers";
-// import { switchRoom } from "../backend/peers";
 import { updateAvatar } from "@/backend/socket";
-import VideoStream from './VideoStream.vue';
 
 export default {
-  components: { VideoStream },
+  components: {
+    AvatarInside,
+    AvatarMenu,
+  },
   props: {
     avatar: Object,
+    isHost: Boolean,
   },
   data() {
     return {
       dragOffsetX: 0.0,
       dragOffsetY: 0.0,
+      talking: false,
+      volume: 50,
+      enableVideo: true,
+      color: { r: 93, g: 111, b: 199 },
     };
+  },
+  mounted() {
+    this.color = this.getRandColor();
   },
   computed: {
     initials() {
@@ -43,22 +83,38 @@ export default {
           .toUpperCase() + "."
       );
     },
-    stream() {
-      for (const stream of state.streams) {
-        if (stream.peer.indexOf(this.avatar.id) !== -1) {
-          return stream;
-        }
-      }
-      return null;
-    },
-    draggable() {
+    isMyAvatar() {
       return state.myId === this.avatar.id;
+    },
+    scaledVolume() {
+      return this.volume / 100;
     },
   },
   methods: {
-    // moveElem(document.getElementById(), this.id, this.roomId, this.initials);
+    setTalking(to) {
+      this.talking = to
+      console.log(this.talking)
+    },
+    getRandColor() {
+      const colors = [
+        { r: 93, g: 111, b: 199 },
+        { r: 164, g: 93, b: 199 },
+        { r: 199, g: 93, b: 151 },
+        { r: 199, g: 93, b: 93 },
+        { r: 199, g: 153, b: 93 },
+        { r: 178, g: 199, b: 93 },
+        { r: 104, g: 199, b: 93 },
+        { r: 93, g: 199, b: 164 },
+        { r: 93, g: 180, b: 199 },
+        { r: 93, g: 129, b: 199 },
+      ];
+
+      let colorIndex = Math.floor(Math.random() * colors.length);
+      let randColor = colors[colorIndex];
+      return randColor;
+    },
     onMouseDown(e) {
-      if (!this.draggable) return;
+      if (!this.isMyAvatar) return;
       e.preventDefault();
       document.onmouseup = () => this.onMouseUp();
       document.onmousemove = (e) => this.onMouseMove(e);
@@ -72,11 +128,40 @@ export default {
         top: e.clientY - this.dragOffsetY,
       });
     },
-
     onMouseUp() {
       document.onmouseup = null;
       document.onmousemove = null;
     },
+    changeVolume(volume) {
+      this.volume = volume;
+    },
+    setEnableVideo(value) {
+      this.enableVideo = value;
+    },
+  },
+  updated() {
+    if (this.isMyAvatar) {
+      this.volume = 0; // prevents you from hearing yourself (might take a second to complete)
+    }
   },
 };
 </script>
+
+<style>
+.talking {
+  border: 0.3rem solid lime;
+  border-color: lime !important;
+}
+</style>
+
+<style scoped>
+.v-avatar {
+  z-index: 10;
+}
+.isMyAvatar {
+  z-index: 20;
+}
+.avatar-card {
+  z-index: 30;
+}
+</style>

@@ -1,33 +1,38 @@
 <template>
   <v-container>
-    <v-btn-toggle v-model="toggle_multiple" dense dark multiple>
-      <v-btn :color="drawingOn ? '#00008b' : 'dark'" @click="toggleDraw">
+    <v-item-group>
+      <v-btn
+        :color="drawingOn ? '#00FF00' : '#FFFFFF'"
+        x-large
+        icon
+        @click="toggleDraw"
+      >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
 
       <!-- Not muted -->
-      <v-btn v-if="audioOn" @click="toggleMute">
+      <v-btn v-if="audioOn" color="#FFFFFF" x-large icon @click="toggleMute">
         <v-icon>mdi-microphone</v-icon>
       </v-btn>
       <!-- Muted -->
-      <v-btn v-else color="#8b0000" @click="toggleMute">
+      <v-btn v-else color="#FF0000" x-large icon @click="toggleMute">
         <v-icon>mdi-microphone-off</v-icon>
       </v-btn>
 
       <!-- Camera off -->
-      <v-btn v-if="cameraOn" @click="toggleCamera">
+      <v-btn v-if="cameraOn" color="#FFFFFF" x-large icon @click="toggleCamera">
         <v-icon>mdi-camera</v-icon>
       </v-btn>
 
       <!-- Camera on -->
-      <v-btn v-else color="#8b0000" @click="toggleCamera">
+      <v-btn v-else color="#FF0000" x-large icon @click="toggleCamera">
         <v-icon>mdi-camera-off</v-icon>
       </v-btn>
 
-      <v-btn @click="exitRoom">
+      <v-btn color="#FFFFFF" x-large icon @click="exitRoom">
         <v-icon>mdi-exit-to-app</v-icon>
       </v-btn>
-    </v-btn-toggle>
+    </v-item-group>
   </v-container>
 </template>
 
@@ -39,8 +44,7 @@ export default {
     return {
       audioOn: false,
       cameraOn: false,
-      drawingOn: false,
-      toggle_multiple: [],
+      drawingOn: true,
     };
   },
   methods: {
@@ -55,6 +59,7 @@ export default {
     },
     toggleDraw() {
       this.drawingOn = !this.drawingOn;
+      this.$emit("setWhiteboardActive", this.drawingOn);
     },
     exitRoom() {
       console.log("Trying to exit the current room.");
