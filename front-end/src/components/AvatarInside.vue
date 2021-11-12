@@ -21,6 +21,7 @@
       v-if="stream && avatar.video && enableVideo"
       :muted="volume == 0 || !this.avatar.audio"
       :volume="volume"
+      @talking="$emit('talking', $event)"
     />
 
     <!-- play the audio only if there is:
@@ -32,9 +33,14 @@
     <div style="display: none">
       <VideoStream
         :stream="stream"
-        v-if="stream && (!avatar.video || (avatar.video && !enableVideo)) && avatar.audio"
+        v-if="
+          stream &&
+          (!avatar.video || (avatar.video && !enableVideo)) &&
+          avatar.audio
+        "
         :muted="volume == 0"
         :volume="volume"
+        @talking="$emit('talking', $event)"
       />
     </div>
   </div>

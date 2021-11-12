@@ -11,7 +11,7 @@
       >
         <template v-slot:activator="{ on }">
           <v-avatar
-            :class="{ isMyAvatar: isMyAvatar }"
+            :class="{ isMyAvatar: isMyAvatar, talking: talking }"
             size="120"
             :style="`height: 90px; min-width: 90px; width: 90px; top: ${avatar.top}px; left:${avatar.left}px;`"
             @contextmenu.prevent="on.click"
@@ -23,6 +23,7 @@
               :initials="initials"
               :volume="scaledVolume"
               :enableVideo="enableVideo"
+              @talking="setTalking($event)"
             />
           </v-avatar>
         </template>
@@ -90,6 +91,10 @@ export default {
     },
   },
   methods: {
+    setTalking(to) {
+      this.talking = to
+      console.log(this.talking)
+    },
     getRandColor() {
       const colors = [
         { r: 93, g: 111, b: 199 },
@@ -145,6 +150,7 @@ export default {
 <style>
 .talking {
   border: 0.3rem solid lime;
+  border-color: lime !important;
 }
 </style>
 
