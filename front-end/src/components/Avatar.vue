@@ -33,6 +33,7 @@
             :initials="initials"
             :color="color"
             :isMyAvatar="isMyAvatar"
+            :hostPrivilege="isHost"
             @changeVolume="changeVolume"
             @setEnableVideo="setEnableVideo"
           />
@@ -55,6 +56,7 @@ export default {
   },
   props: {
     avatar: Object,
+    isHost: Boolean,
   },
   data() {
     return {

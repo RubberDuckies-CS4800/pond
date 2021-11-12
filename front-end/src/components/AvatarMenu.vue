@@ -29,7 +29,7 @@
           <v-switch v-model="enableVideo" prepend-icon="mdi-video" @click="setEnableVideo"></v-switch>
 
           <v-divider class="my-3"></v-divider>
-          <v-btn depressed rounded text disabled>Kick User</v-btn>
+          <v-btn depressed rounded text :disabled="!hostPrivilege">Kick User</v-btn>
         </div>
       </div>
     </v-list-item-content>
@@ -43,6 +43,7 @@ export default {
     initials: String,
     color: Object,
     isMyAvatar: Boolean,
+    hostPrivilege: Boolean,
   },
   data: () => ({
     volume: 50,

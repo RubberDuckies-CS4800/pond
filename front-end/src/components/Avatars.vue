@@ -1,12 +1,14 @@
 <template>
   <div>
     <!-- checking if the avatar is being added to the data -->
-    <!-- <h4>{{ avatars }}</h4> -->
-    
+    <!-- <h4>{{ avatars }}</h4>
+    <h1> isHost {{ isHost }} </h1>
+    <h1> myAvatar {{ myAvatar }}</h1> -->
     <Avatar
       v-for="avatar of avatars"
       :key="avatar.id"
       :avatar="avatar"
+      :isHost="isHost"
     />
   </div>
 </template>
@@ -44,6 +46,12 @@ export default {
     },
     myStream() {
       return state.myStream;
+    },
+    myAvatar() {
+      return this.avatars[state.myId];
+    },
+    isHost() {
+      return this.myAvatar.isHost;
     },
   },
   data() {
