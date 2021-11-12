@@ -11,7 +11,7 @@ function handleConnection(socket) {
             const roomId = currentRoom.id;
             socket.broadcast.to(roomId).emit("user-disconnected", userId)
             if (userId) {
-                currentRoom.deleteAvatar(roomId);
+                currentRoom.deleteAvatar(userId);
                 socket.broadcast.to(roomId).emit("remove-avatar", userId)
             }
 
@@ -21,7 +21,7 @@ function handleConnection(socket) {
         }
     }
 
-    socket.on("join-room", (roomId, theUserId) => {
+    socket.on("join-room", (roomId, theUserId, isHost) => {
         userId = theUserId
         currentRoom = getRoom(roomId)
         socket.join(roomId)
@@ -38,6 +38,7 @@ function handleConnection(socket) {
             left: 8.0,
             audio: false,
             video: false,
+            isHost: isHost
         }
         for (const avatar of Object.values(currentRoom.avatars)) {
             socket.emit("avatar", avatar)

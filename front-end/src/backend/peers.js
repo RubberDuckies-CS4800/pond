@@ -75,7 +75,7 @@ export function leaveRoom() {
     state.streams = [];
 }
 
-export function switchRoom(roomId, name) {
+export function switchRoom(roomId, name, isHost) {
     leaveRoom();
     state.roomId = roomId;
     state.myName = name;
@@ -99,7 +99,7 @@ export function switchRoom(roomId, name) {
     state.myPeer.on("open", userId => {
         state.myId = userId
         if (state.myStream) state.myStream.peer = state.myId
-        sendJoinRoom(roomId, userId);
+        sendJoinRoom(roomId, userId, isHost);
         updateAvatar({ name: name });
     })
 

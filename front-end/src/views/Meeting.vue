@@ -8,6 +8,8 @@
     <Whiteboard :whiteboardActive="whiteboardActive" />
     <!-- <VideoStream v-for="stream in streams" :key="stream.id" :stream="stream" /> -->
     <Avatars :name="myName" :roomId="roomId" :cameraOn="cameraOn" />
+
+    
     <div id="user_controls">
       <UserControls
         @toggle_cam="toggleCam"
@@ -34,7 +36,7 @@ export default {
   },
   data() {
     return {
-      cameraOn: true,
+      cameraOn: false,
       whiteboardActive: true,
     };
   },
