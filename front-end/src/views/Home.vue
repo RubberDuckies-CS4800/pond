@@ -45,7 +45,7 @@
 
 <script>
 // @ is an alias to /src
-import { switchRoom } from "../backend/peers"
+import { switchRoom } from "@/backend/peers"
 export default {
   data() {
     return {
