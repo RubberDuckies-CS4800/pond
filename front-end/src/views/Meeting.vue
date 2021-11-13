@@ -1,5 +1,6 @@
 <template>
 	<div class="hello">
+		<!-- <h1>{{ avatars }}</h1> -->
 		<h1>Meeting Room</h1>
 		<p>{{ streams.length }} users are connected</p>
 		<p v-if="!myStreamIsOk">
@@ -8,8 +9,8 @@
 		<Whiteboard :whiteboardActive="whiteboardActive" />
 
 		<Avatars
+			:avatars="avatars"
 			:name="myName"
-			:roomId="roomId"
 			:myAvatar="myAvatar"
 			:isHost="isHost"
 		/>
@@ -17,6 +18,9 @@
 		<div id="user_controls">
 			<UserControls @setWhiteboardActive="setWhiteboardActive" />
 		</div>
+
+		<!-- set to isHost -->
+		<MuteAll :myAvatar="myAvatar" :isHost="isHost" />
 	</div>
 </template>
 
@@ -25,27 +29,25 @@ import { state } from "@/backend/peers";
 import Whiteboard from "@/components/Whiteboard.vue";
 import Avatars from "@/components/Avatars.vue";
 import UserControls from "@/components/UserControls.vue";
-import { sendLeaveRoom } from "@/backend/socket";
+import { sendLeaveRoom, onAvatar, onRemoveAvatar } from "@/backend/socket";
+import MuteAll from "@/components/MuteAll.vue";
 
 export default {
 	components: {
 		Whiteboard,
 		Avatars,
 		UserControls,
+		MuteAll,
 	},
 	data() {
 		return {
 			whiteboardActive: true,
+			avatars: {},
 		};
 	},
 	name: "Meeting",
 	props: {
 		msg: String,
-	},
-	methods: {
-		setWhiteboardActive(whiteboardActive) {
-			this.whiteboardActive = whiteboardActive;
-		},
 	},
 	computed: {
 		streams() {
@@ -61,16 +63,33 @@ export default {
 			return state.myStreamIsOk;
 		},
 		myAvatar() {
-			return this.avatars[state.myId];
+			if (this.avatars) {
+				return this.avatars[state.myId];
+			}
+			return null;
 		},
 		isHost() {
-			return this.myAvatar.isHost;
+			if (this.myAvatar) {
+				return this.myAvatar.isHost;
+			}
+			return false;
 		},
 	},
 	mounted() {
 		if (state.roomId === null) {
 			this.$router.push("/");
 		}
+		onAvatar((avatar) => {
+			this.$set(this.avatars, avatar.id, avatar);
+		});
+		onRemoveAvatar((id) => {
+			this.$delete(this.avatars, id);
+		});
+	},
+	methods: {
+		setWhiteboardActive(whiteboardActive) {
+			this.whiteboardActive = whiteboardActive;
+		},
 	},
 	beforeDestroy() {
 		console.log("BEFOREDESTROYED");

@@ -10,14 +10,12 @@
 </template>
 
 <script>
-import { state } from "@/backend/peers";
-import { onAvatar, onRemoveAvatar } from "@/backend/socket";
 import Avatar from "@/components/Avatar.vue";
 
 export default {
 	props: {
+		avatars: Object,
 		name: String,
-		roomId: String,
 		myAvatar: Object,
 		isHost: Boolean,
 	},
@@ -35,29 +33,6 @@ export default {
 					.toUpperCase() + "."
 			);
 		},
-		streams() {
-			return state.streams;
-		},
-		myName() {
-			return state.myName;
-		},
-		myStream() {
-			return state.myStream;
-		},
-	},
-	data() {
-		return {
-			avatars: {},
-			id: null,
-		};
-	},
-	mounted() {
-		onAvatar((avatar) => {
-			this.$set(this.avatars, avatar.id, avatar);
-		});
-		onRemoveAvatar((id) => {
-			this.$delete(this.avatars, id);
-		});
 	},
 };
 </script>

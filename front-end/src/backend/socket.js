@@ -59,6 +59,10 @@ export function setVideoEnabled(videoEnabled) {
 	socket.emit("avatar", { video: videoEnabled })
 }
 
+export function sendMuteAll(hostAvatar) {
+	socket.emit("mute-all", hostAvatar)
+}
+
 // Extra client-side socket connection events
 socket.on("connect", () => {
 	console.log(`Socket Connected: ${socket.connected}`) // true
