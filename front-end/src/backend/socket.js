@@ -63,6 +63,10 @@ export function sendMuteAll(hostAvatar) {
 	socket.emit("mute-all", hostAvatar)
 }
 
+export function onMuteAll(hostAvatar) {
+	socket.on("mute-all", hostAvatar)
+}
+
 // Extra client-side socket connection events
 socket.on("connect", () => {
 	console.log(`Socket Connected: ${socket.connected}`) // true

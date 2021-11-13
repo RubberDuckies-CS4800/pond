@@ -95,6 +95,7 @@ function handleConnection(socket) {
 				socket.emit("avatar", updated)
 			}
 		}
+		socket.broadcast.to(currentRoom.id).emit("mute-all", hostAvatar)
 	})
 }
 
