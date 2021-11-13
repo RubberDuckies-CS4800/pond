@@ -55,7 +55,6 @@ export default {
     toggleCamera() {
       this.cameraOn = !this.cameraOn;
       setVideoEnabled(this.cameraOn);
-      this.$emit("toggle_cam", this.cameraOn);
     },
     toggleDraw() {
       this.drawingOn = !this.drawingOn;
