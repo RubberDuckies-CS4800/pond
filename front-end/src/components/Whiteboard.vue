@@ -50,7 +50,7 @@ export default {
       fillStyle: "fill:white;",
     };
   },
-  mounted() {
+  created() {
     onWhiteboardFigure((fig) => this.figures.push(fig));
   },
   methods: {

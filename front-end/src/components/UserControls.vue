@@ -59,7 +59,7 @@ export default {
 			drawingOn: true,
 		};
 	},
-	mounted() {
+	created() {
 		onMuteAll((hostAvatar) => {
 			console.log(hostAvatar.name + " muted the room.");
 			this.audioOn = false;

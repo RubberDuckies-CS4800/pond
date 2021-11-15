@@ -72,7 +72,7 @@ export default {
 			color: { r: 93, g: 111, b: 199 },
 		};
 	},
-	mounted() {
+	created() {
 		this.color = this.getRandColor();
 	},
 	computed: {

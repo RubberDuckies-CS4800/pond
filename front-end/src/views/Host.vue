@@ -22,7 +22,7 @@ export default {
         roomId: ""
         }
     },
-    mounted() {
+    created() {
         this.roomId = this.generateRoomId()
     },
     methods: {

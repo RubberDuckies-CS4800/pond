@@ -47,6 +47,10 @@ export function onAvatar(avatar) {
 	socket.on("avatar", avatar)
 }
 
+export function requestAvatars() {
+	socket.emit("request-avatars")
+}
+
 export function onRemoveAvatar(avatar) {
 	socket.on("remove-avatar", avatar)
 }

@@ -29,7 +29,12 @@ import { state } from "@/backend/peers";
 import Whiteboard from "@/components/Whiteboard.vue";
 import Avatars from "@/components/Avatars.vue";
 import UserControls from "@/components/UserControls.vue";
-import { sendLeaveRoom, onAvatar, onRemoveAvatar } from "@/backend/socket";
+import {
+	sendLeaveRoom,
+	onAvatar,
+	onRemoveAvatar,
+	requestAvatars,
+} from "@/backend/socket";
 import MuteAll from "@/components/MuteAll.vue";
 
 export default {
@@ -75,7 +80,7 @@ export default {
 			return false;
 		},
 	},
-	mounted() {
+	created() {
 		if (state.roomId === null) {
 			this.$router.push("/");
 		}
@@ -85,6 +90,8 @@ export default {
 		onRemoveAvatar((id) => {
 			this.$delete(this.avatars, id);
 		});
+
+		requestAvatars();
 	},
 	methods: {
 		setWhiteboardActive(whiteboardActive) {
@@ -92,7 +99,6 @@ export default {
 		},
 	},
 	beforeDestroy() {
-		console.log("BEFOREDESTROYED");
 		sendLeaveRoom();
 	},
 };

@@ -59,8 +59,8 @@ export default {
       this.reveal = true;
     },
     joinRoom() {
-        switchRoom(this.code, this.name, false);
         this.$router.push('/meeting');
+        switchRoom(this.code, this.name, false);
     },
     hostMeeting() {
         this.$router.push('/host');

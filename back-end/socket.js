@@ -21,6 +21,14 @@ function handleConnection(socket) {
 		}
 	}
 
+	function sendAvatars() {
+		if (currentRoom) {
+			for (const avatar of Object.values(currentRoom.avatars)) {
+				socket.emit("avatar", avatar)
+			}
+		}
+	}
+
 	socket.on("join-room", (roomId, theUserId, isHost) => {
 		userId = theUserId
 		currentRoom = getRoom(roomId)
@@ -40,9 +48,8 @@ function handleConnection(socket) {
 			video: false,
 			isHost: isHost,
 		}
-		for (const avatar of Object.values(currentRoom.avatars)) {
-			socket.emit("avatar", avatar)
-		}
+
+		sendAvatars()
 
 		//socket.broadcast sends a message to everyone in the room
 		socket.broadcast.to(roomId).emit("user-connected", userId)
@@ -71,6 +78,10 @@ function handleConnection(socket) {
 			socket.broadcast.to(currentRoom.id).emit("avatar", updated)
 			socket.emit("avatar", updated)
 		}
+	})
+
+	socket.on("request-avatars", () => {
+		sendAvatars()
 	})
 
 	socket.on("remove-avatar", (avatarId) => {
