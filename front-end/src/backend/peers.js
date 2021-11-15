@@ -12,15 +12,23 @@ function createEmptyAudioTrack() {
 }
 
 const fakeStream = new MediaStream([createEmptyAudioTrack()]);
+let hasMicrophone = false;
+let hasCamera = false;
 
 async function getMedia() {
     const md = navigator.mediaDevices
     try {
+        hasMicrophone = true;
+        hasCamera = true;
         return await md.getUserMedia({ audio: true, video: true });
     } catch (e) { /* */ }
     try {
+        hasMicrophone = true;
+        hasCamera = false;
         return await md.getUserMedia({ audio: true, video: false });
     } catch (e) { /* */ }
+    hasMicrophone = false;
+    hasCamera = false;
     return fakeStream;
 }
 
@@ -35,6 +43,8 @@ export const state = Vue.observable({
     myPeer: null,
     myStream: null,
     myStreamIsOk: false,
+    hasMicrophone: false,
+    hasCamera: false,
 });
 
 let connections = {};
@@ -92,6 +102,8 @@ export function switchRoom(roomId, name, isHost) {
     myStream.then(stream => {
         stream.peer = state.myId
         state.myStream = stream
+        state.hasMicrophone = hasMicrophone;
+        state.hasCamera = hasCamera;
         state.myStreamIsOk = stream !== fakeStream
         state.streams.push(stream)
     });

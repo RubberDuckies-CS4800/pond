@@ -1,83 +1,33 @@
 <template>
-	<v-container>
-		<v-item-group>
-			<v-btn
-				:color="drawingOn ? '#00FF00' : '#FFFFFF'"
-				x-large
-				icon
-				@click="toggleDraw"
-			>
-				<v-icon>mdi-pencil</v-icon>
-			</v-btn>
-
-			<!-- Not muted -->
-			<v-btn
-				v-if="audioOn"
-				color="#FFFFFF"
-				x-large
-				icon
-				@click="toggleMute"
-			>
-				<v-icon>mdi-microphone</v-icon>
-			</v-btn>
-			<!-- Muted -->
-			<v-btn v-else color="#FF0000" x-large icon @click="toggleMute">
-				<v-icon>mdi-microphone-off</v-icon>
-			</v-btn>
-
-			<!-- Camera off -->
-			<v-btn
-				v-if="cameraOn"
-				color="#FFFFFF"
-				x-large
-				icon
-				@click="toggleCamera"
-			>
-				<v-icon>mdi-camera</v-icon>
-			</v-btn>
-
-			<!-- Camera on -->
-			<v-btn v-else color="#FF0000" x-large icon @click="toggleCamera">
-				<v-icon>mdi-camera-off</v-icon>
-			</v-btn>
+	<v-container class="user-controls">
+		<v-row justify="center">
+			<Pencil @toggleDraw="setWhiteboardActive" />
+			<Microphone :hasMicrophone="hasMicrophone" />
+			<Camera :hasCamera="hasCamera" />
 
 			<v-btn color="#FFFFFF" x-large icon @click="exitRoom">
 				<v-icon>mdi-exit-to-app</v-icon>
 			</v-btn>
-		</v-item-group>
+		</v-row>
 	</v-container>
 </template>
 
 <script>
-import { setAudioEnabled, setVideoEnabled, onMuteAll } from "@/backend/socket";
+import Pencil from "@/components/UserControls/Pencil.vue";
+import Microphone from "@/components/UserControls/Microphone.vue";
+import Camera from "@/components/UserControls/Camera.vue";
 
 export default {
-	data() {
-		return {
-			audioOn: false,
-			cameraOn: false,
-			drawingOn: true,
-		};
+	props: {
+		hasCamera: Boolean,
+		hasMicrophone: Boolean,
 	},
-	created() {
-		onMuteAll((hostAvatar) => {
-			console.log(hostAvatar.name + " muted the room.");
-			this.audioOn = false;
-		});
+	components: {
+		Pencil,
+		Microphone,
+		Camera,
 	},
 	methods: {
-		toggleMute() {
-			this.audioOn = !this.audioOn;
-			setAudioEnabled(this.audioOn);
-		},
-		toggleCamera() {
-			this.cameraOn = !this.cameraOn;
-			setVideoEnabled(this.cameraOn);
-		},
-		toggleDraw() {
-			this.drawingOn = !this.drawingOn;
-			this.$emit("setWhiteboardActive", this.drawingOn);
-		},
 		exitRoom() {
 			console.log("Trying to exit the current room.");
 			// some other functionality goes here
@@ -87,5 +37,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.user-controls {
+	position: absolute;
+	width: 300px;
+	bottom: 0px;
+	right: 25%;
+	left: 50%;
+	margin-left: -150px;
+}
 </style>

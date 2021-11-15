@@ -6,6 +6,7 @@
 		<p v-if="!myStreamIsOk">
 			You have not given Pond permission to use your microphone or webcam
 		</p>
+
 		<Whiteboard :whiteboardActive="whiteboardActive" />
 
 		<Avatars
@@ -15,11 +16,12 @@
 			:isHost="isHost"
 		/>
 
-		<div id="user_controls">
-			<UserControls @setWhiteboardActive="setWhiteboardActive" />
-		</div>
+		<UserControls
+			@setWhiteboardActive="setWhiteboardActive"
+			:hasMicrophone="hasMicrophone"
+			:hasCamera="hasCamera"
+		/>
 
-		<!-- set to isHost -->
 		<MuteAll :myAvatar="myAvatar" :isHost="isHost" />
 	</div>
 </template>
@@ -67,6 +69,12 @@ export default {
 		myStreamIsOk() {
 			return state.myStreamIsOk;
 		},
+		hasMicrophone() {
+			return state.hasMicrophone;
+		},
+		hasCamera() {
+			return state.hasCamera;
+		},
 		myAvatar() {
 			if (this.avatars) {
 				return this.avatars[state.myId];
@@ -103,10 +111,5 @@ export default {
 	},
 };
 </script>
-<style>
-#user_controls {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-}
+<style scoped>
 </style>
