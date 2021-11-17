@@ -29,6 +29,7 @@ import { sendWhiteboardFigure, handlers } from "@/backend/socket";
 import WhiteboardFigure from "./WhiteboardFigure.vue";
 import { v4 as uuidv4 } from "uuid";
 import whiteboardState from "@/backend/whiteboardState";
+import { deleteWhiteboardFigure } from '../backend/socket';
 
 export default {
   components: { WhiteboardFigure },
@@ -53,6 +54,7 @@ export default {
   },
   created() {
     handlers.onWhiteboardFigure = (fig) => this.figures.push(fig);
+    handlers.onDeleteWhiteboardFigure = (id) => this.figures = this.figures.filter((x) => x.id !== id);
   },
   methods: {
     // The SVG element's coordinate space is the largest centered 16:9 rectangle
@@ -149,7 +151,8 @@ export default {
           minDist = Math.sqrt(dx * dx + dy * dy);
         }
         if (minDist < 0.15) {
-          console.log("delete", obj.id);
+          deleteWhiteboardFigure(obj.id);
+          this.figures = this.figures.filter((x) => x.id !== obj.id);
         }
       }
     },

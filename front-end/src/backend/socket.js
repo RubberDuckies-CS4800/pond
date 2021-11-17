@@ -25,6 +25,7 @@ export const handlers = {
 	onUserConnected: () => null,
 	onUserDisconnected: () => null,
 	onWhiteboardFigure: () => null,
+	onDeleteWhiteboardFigure: () => null,
 	onAvatar: () => null,
 	onRemoveAvatar: () => null,
 	onMuteAll: () => null,
@@ -37,12 +38,19 @@ socket.on("user-disconnected", (...args) =>
 socket.on("whiteboard-figure", (...args) =>
 	handlers.onWhiteboardFigure(...args)
 )
+socket.on("delete-whiteboard-figure", (...args) =>
+	handlers.onDeleteWhiteboardFigure(...args)
+)
 socket.on("avatar", (...args) => handlers.onAvatar(...args))
 socket.on("remove-avatar", (...args) => handlers.onAvatar(...args))
 socket.on("mute-all", (...args) => handlers.onMuteAll(...args))
 
 export function sendWhiteboardFigure(figure) {
 	socket.emit("whiteboard-figure", figure)
+}
+
+export function deleteWhiteboardFigure(id) {
+	socket.emit("delete-whiteboard-figure", id)
 }
 
 export function updateAvatar(avatar) {
