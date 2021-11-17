@@ -34,9 +34,6 @@ import { deleteWhiteboardFigure } from '../backend/socket';
 export default {
   components: { WhiteboardFigure },
   name: "Whiteboard",
-  props: {
-    whiteboardActive: Boolean,
-  },
   computed: {
     streams() {
       return state.streams;
@@ -159,7 +156,6 @@ export default {
 
     onMouseDown(event) {
       if (this.drawingNow) return; // This can happen if you leave the window while drawing
-      if (!this.whiteboardActive) return;
       this.lastPoint = this.mouseToCanvasPosition(event);
       const { x, y } = this.lastPoint;
       if (whiteboardState.drawing) {

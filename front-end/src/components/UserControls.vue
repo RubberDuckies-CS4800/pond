@@ -31,16 +31,10 @@ export default {
 		Camera,
 	},
 	methods: {
-		setWhiteboardActive() {
-
-		},
 		exitRoom() {
 			console.log("Trying to exit the current room.");
 			// some other functionality goes here
 			this.$router.push("/");
-		},
-		setWhiteboardActive(whiteboardActive) {
-			this.$emit("setWhiteboardActive", whiteboardActive);
 		},
 	},
 };

@@ -7,7 +7,7 @@
 			You have not given Pond permission to use your microphone or webcam
 		</p>
 
-		<Whiteboard :whiteboardActive="whiteboardActive" />
+		<Whiteboard />
 
 		<Avatars
 			:avatars="avatars"
@@ -17,7 +17,6 @@
 		/>
 
 		<UserControls
-			@setWhiteboardActive="setWhiteboardActive"
 			:hasMicrophone="hasMicrophone"
 			:hasCamera="hasCamera"
 		/>
@@ -47,7 +46,6 @@ export default {
 	},
 	data() {
 		return {
-			whiteboardActive: true,
 			avatars: {},
 		};
 	},
@@ -99,11 +97,6 @@ export default {
 		};
 
 		requestAvatars();
-	},
-	methods: {
-		setWhiteboardActive(whiteboardActive) {
-			this.whiteboardActive = whiteboardActive;
-		},
 	},
 	beforeDestroy() {
 		sendLeaveRoom();
