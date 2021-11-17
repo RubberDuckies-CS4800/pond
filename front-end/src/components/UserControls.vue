@@ -33,6 +33,9 @@ export default {
 			// some other functionality goes here
 			this.$router.push("/");
 		},
+		setWhiteboardActive(whiteboardActive) {
+			this.$emit("setWhiteboardActive", whiteboardActive);
+		},
 	},
 };
 </script>

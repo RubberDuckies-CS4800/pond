@@ -29,6 +29,9 @@
 <script>
 import { setVideoEnabled } from "@/backend/socket";
 export default {
+	props: {
+		hasCamera: Boolean,
+	},
 	data() {
 		return {
 			cameraOn: false,
