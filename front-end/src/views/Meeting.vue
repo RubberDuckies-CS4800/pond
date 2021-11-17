@@ -33,8 +33,7 @@ import Avatars from "@/components/Avatars.vue";
 import UserControls from "@/components/UserControls.vue";
 import {
 	sendLeaveRoom,
-	onAvatar,
-	onRemoveAvatar,
+	handlers,
 	requestAvatars,
 } from "@/backend/socket";
 import MuteAll from "@/components/MuteAll.vue";
@@ -92,12 +91,12 @@ export default {
 		if (state.roomId === null) {
 			this.$router.push("/");
 		}
-		onAvatar((avatar) => {
+		handlers.onAvatar = (avatar) => {
 			this.$set(this.avatars, avatar.id, avatar);
-		});
-		onRemoveAvatar((id) => {
+		};
+		handlers.onRemoveAvatar = (id) => {
 			this.$delete(this.avatars, id);
-		});
+		};
 
 		requestAvatars();
 	},

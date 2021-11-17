@@ -25,7 +25,7 @@
 
 <script>
 import { state } from "@/backend/peers";
-import { sendWhiteboardFigure, onWhiteboardFigure } from "@/backend/socket";
+import { sendWhiteboardFigure, handlers } from "@/backend/socket";
 import WhiteboardFigure from "./WhiteboardFigure.vue";
 import { v4 as uuidv4 } from "uuid";
 import whiteboardState from "@/backend/whiteboardState";
@@ -52,7 +52,7 @@ export default {
     };
   },
   created() {
-    onWhiteboardFigure((fig) => this.figures.push(fig));
+    handlers.onWhiteboardFigure = (fig) => this.figures.push(fig);
   },
   methods: {
     // The SVG element's coordinate space is the largest centered 16:9 rectangle

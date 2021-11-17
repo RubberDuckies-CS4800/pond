@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { setAudioEnabled, onMuteAll } from "@/backend/socket";
+import { setAudioEnabled, handlers } from "@/backend/socket";
 export default {
 	props: {
 		hasMicrophone: Boolean,
@@ -38,10 +38,10 @@ export default {
 		};
 	},
 	created() {
-		onMuteAll((hostAvatar) => {
+		handlers.onMuteAll = (hostAvatar) => {
 			console.log(hostAvatar.name + " muted the room.");
 			this.audioOn = false;
-		});
+		};
 	},
 	methods: {
 		toggleMute() {
