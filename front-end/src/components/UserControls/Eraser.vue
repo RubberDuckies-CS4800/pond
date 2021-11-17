@@ -1,6 +1,6 @@
 <template>
   <v-btn :color="enabled ? '#00FF00' : '#FFFFFF'" x-large icon @click="toggle">
-    <v-icon>mdi-pencil</v-icon>
+    <v-icon>mdi-eraser</v-icon>
   </v-btn>
 </template>
 
@@ -15,13 +15,13 @@ export default {
   },
   computed: {
     enabled() {
-      return whiteboardState.drawing;
+      return whiteboardState.erasing;
     },
   },
   methods: {
     toggle() {
-      whiteboardState.drawing ^= true;
-      whiteboardState.erasing = false;
+      whiteboardState.drawing = false;
+      whiteboardState.erasing ^= true;
     },
   },
 };

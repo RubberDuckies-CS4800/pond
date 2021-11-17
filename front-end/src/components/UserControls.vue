@@ -1,7 +1,8 @@
 <template>
 	<v-container class="user-controls">
 		<v-row justify="center">
-			<Pencil @toggleDraw="setWhiteboardActive" />
+			<Pencil />
+			<Eraser />
 			<Microphone :hasMicrophone="hasMicrophone" />
 			<Camera :hasCamera="hasCamera" />
 
@@ -14,6 +15,7 @@
 
 <script>
 import Pencil from "@/components/UserControls/Pencil.vue";
+import Eraser from "@/components/UserControls/Eraser.vue";
 import Microphone from "@/components/UserControls/Microphone.vue";
 import Camera from "@/components/UserControls/Camera.vue";
 
@@ -24,10 +26,14 @@ export default {
 	},
 	components: {
 		Pencil,
+		Eraser,
 		Microphone,
 		Camera,
 	},
 	methods: {
+		setWhiteboardActive() {
+
+		},
 		exitRoom() {
 			console.log("Trying to exit the current room.");
 			// some other functionality goes here

@@ -72,6 +72,13 @@ function handleConnection(socket) {
 		}
 	})
 
+	socket.on("delete-whiteboard-figure", (id) => {
+		if (currentRoom) {
+			currentRoom.figures = currentRoom.figures.filter((x) => x.id !== id);
+			socket.broadcast.to(currentRoom.id).emit("delete-whiteboard-figure", id)
+		}
+	})
+
 	socket.on("avatar", (avatar) => {
 		if (currentRoom) {
 			const updated = currentRoom.updateAvatar({ id: userId, ...avatar })
