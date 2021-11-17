@@ -28,6 +28,7 @@ import { state } from "@/backend/peers";
 import { sendWhiteboardFigure, onWhiteboardFigure } from "@/backend/socket";
 import WhiteboardFigure from "./WhiteboardFigure.vue";
 import { v4 as uuidv4 } from "uuid";
+import whiteboardState from "@/backend/whiteboardState";
 
 export default {
   components: { WhiteboardFigure },
@@ -91,8 +92,8 @@ export default {
     addElement(spec) {
       const figure = {
         id: uuidv4(),
-        type: spec.tag,
-        attributes: spec.attrs,
+        type: spec.type,
+        attributes: spec.attributes,
       };
       this.figures.push(figure);
       sendWhiteboardFigure(figure);
@@ -100,8 +101,8 @@ export default {
 
     pathElement(data) {
       return {
-        tag: "path",
-        attrs: {
+        type: "path",
+        attributes: {
           d: data,
           style: "stroke-width:0.02; stroke:white; fill:transparent;",
         },
@@ -110,8 +111,8 @@ export default {
 
     dotElement(pos) {
       return {
-        tag: "circle",
-        attrs: {
+        type: "circle",
+        attributes: {
           cx: pos.x,
           cy: pos.y,
           r: 0.05,
@@ -127,37 +128,76 @@ export default {
       return Math.sqrt(dx * dx + dy * dy);
     },
 
+    deleteAtPoint(deleteAt) {
+      for (const obj of this.figures) {
+        let minDist = 9e9;
+        if (obj.type === "path") {
+          const points = obj.attributes.d
+            .substr(2)
+            .split(" L ")
+            .map((x) => {
+              const coords = x.split(" ").map(parseFloat);
+              return { x: coords[0], y: coords[1] };
+            });
+          for (const point of points) {
+            minDist = Math.min(minDist, this.distance(deleteAt, point));
+          }
+        } else if (obj.type === "circle") {
+          let { x, y } = deleteAt;
+          let dx = x - obj.attributes.cx;
+          let dy = y - obj.attributes.cy;
+          minDist = Math.sqrt(dx * dx + dy * dy);
+        }
+        if (minDist < 0.15) {
+          console.log("delete", obj.id);
+        }
+      }
+    },
+
     onMouseDown(event) {
       if (this.drawingNow) return; // This can happen if you leave the window while drawing
       if (!this.whiteboardActive) return;
-      this.drawingNow = true;
       this.lastPoint = this.mouseToCanvasPosition(event);
       const { x, y } = this.lastPoint;
-      this.wipPath = `M ${x} ${y}`;
+      if (whiteboardState.drawing) {
+        this.drawingNow = true;
+        this.wipPath = `M ${x} ${y}`;
+      } else if (whiteboardState.erasing) {
+        this.drawingNow = true;
+        this.deleteAtPoint(this.lastPoint);
+      }
     },
 
     onMouseMove(event) {
-      if (!this.drawingNow) return;
       const mousePos = this.mouseToCanvasPosition(event);
-      if (this.distance(this.lastPoint, mousePos) > 0.05) {
-        this.lastPoint = mousePos;
-        const { x, y } = this.lastPoint;
-        this.wipPath += ` L ${x} ${y}`;
+      if (whiteboardState.drawing) {
+        if (!this.drawingNow) return;
+        if (this.distance(this.lastPoint, mousePos) > 0.05) {
+          this.lastPoint = mousePos;
+          const { x, y } = this.lastPoint;
+          this.wipPath += ` L ${x} ${y}`;
+        }
+      } else if (whiteboardState.erasing) {
+        if (!this.drawingNow) return;
+        this.deleteAtPoint(mousePos);
       }
     },
 
     onMouseUp(event) {
+      if (!this.drawingNow) return;
       this.drawingNow = false;
-      if (this.wipPath.indexOf("L") === -1) {
-        // If the user just clicked, add a dot instead of a line.
-        this.addElement(this.dotElement(this.lastPoint));
-      } else {
-        // Otherwise, draw a final line segment to where they let go of the mouse.
-        const { x, y } = this.mouseToCanvasPosition(event);
-        this.wipPath += ` L ${x} ${y}`;
-        this.addElement(this.pathElement(this.wipPath));
+      if (whiteboardState.drawing) {
+        if (this.wipPath.indexOf("L") === -1) {
+          // If the user just clicked, add a dot instead of a line.
+          this.addElement(this.dotElement(this.lastPoint));
+        } else {
+          // Otherwise, draw a final line segment to where they let go of the mouse.
+          const { x, y } = this.mouseToCanvasPosition(event);
+          this.wipPath += ` L ${x} ${y}`;
+          this.addElement(this.pathElement(this.wipPath));
+        }
+        this.wipPath = "";
       }
-      this.wipPath = "";
     },
   },
 };
