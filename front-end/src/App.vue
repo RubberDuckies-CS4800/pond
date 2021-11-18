@@ -16,8 +16,7 @@
 // }
 
 #app {
-	background: linear-gradient(45deg, #172a74, #21a9af);
-	background-color: #184e8e;
+	background-color: #29BEDF;
 	height: 100%;
 	margin: 0;
 	padding: 0;
