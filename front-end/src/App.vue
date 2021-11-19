@@ -16,16 +16,16 @@
 // }
 
 #app {
-	background-color: #29BEDF;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	background-attachment: fixed;
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	z-index: 0; // might mess things up
+	// background-color: #29BEDF;
+	// height: 100%;
+	// margin: 0;
+	// padding: 0;
+	// background-attachment: fixed;
+	// font-family: Avenir, Helvetica, Arial, sans-serif;
+	// -webkit-font-smoothing: antialiased;
+	// -moz-osx-font-smoothing: grayscale;
+	// text-align: center;
+	// z-index: 0; // might mess things up
 }
 
 .scrollbar-hidden::-webkit-scrollbar {

@@ -47,6 +47,10 @@ export default {
 </script >
 
 <style scoped>
+h1 {
+  color: white;
+  font-size: 100px;
+}
 .home-options {
   position: absolute;
   top: 50%;
