@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid style="height: 300px">
+	<v-container>
 		<v-row justify="center">
 			<!-- <h1>volume: {{ scaledVolume }}</h1> -->
 			<v-menu
