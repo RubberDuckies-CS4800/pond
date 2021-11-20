@@ -28,7 +28,7 @@ function calcScale (userA, userB, radius, dropoffFactor) {
     if (distance <= radius) {
         scale = 1;
     } else if ((radius < distance) && (distance < x_intercept)) {
-        scale = Math.cos(dropoffFactor * (distance - radius));
+        scale = roundTo(Math.cos(dropoffFactor * (distance - radius)), 2);
     } else {
         scale = 0;
     }
@@ -57,15 +57,28 @@ function calcVolumeArray (userA, userArray) {
     return volumeArray;
 }
 
-let userArray = [];
-for (let i = 0; i < 5; i++) {
-    let decimals = 2
-    let userx = Math.round((Math.random() * 10) * Math.pow(10,decimals)) / Math.pow(10,decimals);
-    let usery = Math.round((Math.random() * 10) * Math.pow(10,decimals)) / Math.pow(10,decimals);
-    
-    userArray.push({x: userx, y: usery});
+function roundTo (num, decimals) {
+    return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
 }
 
+function calcMasterVolumeArray (userArray) {
+    let masterVolumes = [];
+    for (let i = 0; i < userArray.length; i++) {
+        let volumes = calcVolumeArray(userArray[i], userArray);
+        masterVolumes.push(volumes);
+    }
+    return masterVolumes;
+}
+
+function populateArray (arr, amount, decimals) {
+    for (let i = 0; i < amount; i++) {
+        let userx = roundTo(Math.random() * 10, decimals);
+        let usery = roundTo(Math.random() * 10, decimals);
+        arr.push({x: userx, y: usery});
+    }
+}
+
+let userArray = [];
+populateArray(userArray, 5, 2);
 console.log(userArray);
-let volumes = calcVolumeArray(userArray[0], userArray);
-console.log(volumes);
+console.log(calcMasterVolumeArray(userArray));
