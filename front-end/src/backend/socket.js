@@ -42,7 +42,7 @@ socket.on("delete-whiteboard-figure", (...args) =>
 	handlers.onDeleteWhiteboardFigure(...args)
 )
 socket.on("avatar", (...args) => handlers.onAvatar(...args))
-socket.on("remove-avatar", (...args) => handlers.onAvatar(...args))
+socket.on("remove-avatar", (...args) => handlers.onRemoveAvatar(...args))
 socket.on("mute-all", (...args) => handlers.onMuteAll(...args))
 
 export function sendWhiteboardFigure(figure) {
