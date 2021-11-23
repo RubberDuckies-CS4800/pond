@@ -116,7 +116,19 @@ export default {
   text-align: center;
 }
 
-div:not(.graphics){
+.wrapper:not(.graphics){
     z-index: 10;
+}
+
+h1{
+	z-index: 10;
+}
+
+p {
+	z-index: 10;
+}
+
+Whiteboard {
+	z-index: 11;
 }
 </style>
