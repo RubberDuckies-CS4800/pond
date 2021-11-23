@@ -2,7 +2,7 @@
 	<div>
 		<v-btn
 			v-if="isHost"
-			color="purple"
+			color="#71BD36"
 			class="mute-all-btn"
 			@click="muteAll"
 		>
