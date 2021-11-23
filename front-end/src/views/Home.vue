@@ -2,6 +2,9 @@
   <div class="wrapper">
     <HomeOptions class="center-widget" />
     <Graphics class="graphics" />
+    <div id="host_meeting_wrapper" flex align="center" justify="center">
+      <v-btn id="host_meeting_btn" rounded @click="hostMeeting"> Host Meeting </v-btn>
+    </div>
   </div>
 </template>
 
@@ -14,6 +17,11 @@ export default {
     HomeOptions,
     Graphics
   },
+  methods: {
+    hostMeeting() {
+        this.$router.push('/host');
+    }
+  }
 };
 </script>
 <style scoped>
@@ -31,5 +39,25 @@ export default {
 .wrapper {
   display: grid;
   text-align: center;
+}
+
+.submit {
+  justify-content: center;
+}
+.meeting_input {
+  display: inline-block;
+  height: 40%;
+}
+
+#host_meeting_wrapper {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  top: 80%;
+  position: absolute;
+}
+
+#host_meeting_btn {
+  background-color: #FAD423;
 }
 </style>
