@@ -31,12 +31,7 @@ const routes = [
   {
     path: '*',
     name: 'Not Found',
-    component: () => import('../views/NotFound.vue')
-  },
-  {
-    path: '/testing',
-    name: 'Testing',
-    component: () => import('../views/Testing.vue')
+    component: () => import('../views/404notfound.vue')
   },
 ]
 
