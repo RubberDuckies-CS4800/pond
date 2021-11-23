@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <HomeOptions class="center-widget" />
-    <Graphics class="graphics" />
+    <HomeGraphics class="graphics" />
     <div id="host_meeting_wrapper" flex align="center" justify="center">
       <v-btn id="host_meeting_btn" rounded @click="hostMeeting"> Host Meeting </v-btn>
     </div>
@@ -11,11 +11,11 @@
 <script>
 // @ is an alias to /src
 import HomeOptions from "@/components/HomeOptions.vue";
-import Graphics from "@/components/Graphics.vue";
+import HomeGraphics from "@/components/HomeGraphics.vue";
 export default {
   components: {
     HomeOptions,
-    Graphics
+    HomeGraphics
   },
   methods: {
     hostMeeting() {

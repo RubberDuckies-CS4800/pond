@@ -1,6 +1,6 @@
 <template>
 	<div class="host">
-		<Graphics class="graphics" />
+		<HomeGraphics class="graphics" />
 		<div class="meeting_code_vertical_wrapper">
 			<h2>Meeting Code:</h2>
 			<h1 id="copy_meeting">{{ roomId }}</h1>
@@ -29,10 +29,10 @@
 </template>
 <script>
 import { switchRoom } from "@/backend/peers";
-import Graphics from "@/components/Graphics.vue";
+import HomeGraphics from "@/components/HomeGraphics.vue";
 export default {
 	components: {
-		Graphics
+		HomeGraphics
 	},
 	data() {
 		return {
@@ -120,6 +120,10 @@ h1 {
 	align-items: center;
 	justify-content: center;
 	padding: 10%;
+}
+
+#join_meeting_host_btn {
+	background-color: #FAD423;
 }
 
 .v-input {

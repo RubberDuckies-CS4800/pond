@@ -1,6 +1,7 @@
 <template>
-	<div class="hello">
+	<div class="wrapper">
 		<!-- <h1>{{ avatars }}</h1> -->
+		<MeetingGraphics class="graphics" />
 		<h1>Meeting Room</h1>
 		<p>{{ streams.length }} users are connected</p>
 		<p v-if="!myStreamIsOk">
@@ -30,6 +31,7 @@ import { state } from "@/backend/peers";
 import Whiteboard from "@/components/Whiteboard.vue";
 import Avatars from "@/components/Avatars.vue";
 import UserControls from "@/components/UserControls.vue";
+import MeetingGraphics from "@/components/MeetingGraphics.vue";
 import {
 	sendLeaveRoom,
 	handlers,
@@ -43,6 +45,7 @@ export default {
 		Avatars,
 		UserControls,
 		MuteAll,
+		MeetingGraphics
 	},
 	data() {
 		return {
@@ -104,4 +107,16 @@ export default {
 };
 </script>
 <style scoped>
+.graphics {
+  position: fixed;
+}
+
+.wrapper {
+  display: grid;
+  text-align: center;
+}
+
+div:not(.graphics){
+    z-index: 10;
+}
 </style>
