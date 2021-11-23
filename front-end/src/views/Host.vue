@@ -1,5 +1,6 @@
 <template>
 	<div class="host">
+		<Graphics class="graphics" />
 		<div class="meeting_code_vertical_wrapper">
 			<h2>Meeting Code:</h2>
 			<h1 id="copy_meeting">{{ roomId }}</h1>
@@ -28,7 +29,11 @@
 </template>
 <script>
 import { switchRoom } from "@/backend/peers";
+import Graphics from "@/components/Graphics.vue";
 export default {
+	components: {
+		Graphics
+	},
 	data() {
 		return {
 			checkName: true,
@@ -75,6 +80,14 @@ export default {
 };
 </script>
 <style scoped>
+.graphics {
+  position: fixed;
+}
+
+.host {
+  display: grid;
+  text-align: center;
+}
 .meeting_code_vertical_wrapper {
 	margin: 0;
 	position: absolute;
@@ -110,6 +123,6 @@ h1 {
 }
 
 .v-input {
-	width: 30%;
+	width: 225px;
 }
 </style>

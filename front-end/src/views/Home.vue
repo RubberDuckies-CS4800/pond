@@ -10,8 +10,8 @@
 
 <script>
 // @ is an alias to /src
-import HomeOptions from "@/components/Start/HomeOptions.vue";
-import Graphics from "@/components/Start/Graphics.vue";
+import HomeOptions from "@/components/HomeOptions.vue";
+import Graphics from "@/components/Graphics.vue";
 export default {
   components: {
     HomeOptions,
