@@ -101,6 +101,8 @@ export default {
 	justify-content: center;
 	top: 60%;
 	position: absolute;
+	padding-top: 20px;
+
 }
 
 #copy_meeting_id_btn {
