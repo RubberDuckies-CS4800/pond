@@ -24,35 +24,41 @@ export function sendLeaveRoom() {
 export const handlers = {
 	onUserConnected: () => null,
 	onUserDisconnected: () => null,
+	onWhiteboardFigure: () => null,
+	onDeleteWhiteboardFigure: () => null,
+	onAvatar: () => null,
+	onRemoveAvatar: () => null,
+	onMuteAll: () => null,
 }
 
 socket.on("user-connected", (...args) => handlers.onUserConnected(...args))
 socket.on("user-disconnected", (...args) =>
 	handlers.onUserDisconnected(...args)
 )
+socket.on("whiteboard-figure", (...args) =>
+	handlers.onWhiteboardFigure(...args)
+)
+socket.on("delete-whiteboard-figure", (...args) =>
+	handlers.onDeleteWhiteboardFigure(...args)
+)
+socket.on("avatar", (...args) => handlers.onAvatar(...args))
+socket.on("remove-avatar", (...args) => handlers.onRemoveAvatar(...args))
+socket.on("mute-all", (...args) => handlers.onMuteAll(...args))
 
 export function sendWhiteboardFigure(figure) {
 	socket.emit("whiteboard-figure", figure)
 }
 
-export function onWhiteboardFigure(handler) {
-	socket.on("whiteboard-figure", handler)
+export function deleteWhiteboardFigure(id) {
+	socket.emit("delete-whiteboard-figure", id)
 }
 
 export function updateAvatar(avatar) {
 	socket.emit("avatar", avatar)
 }
 
-export function onAvatar(avatar) {
-	socket.on("avatar", avatar)
-}
-
 export function requestAvatars() {
 	socket.emit("request-avatars")
-}
-
-export function onRemoveAvatar(avatar) {
-	socket.on("remove-avatar", avatar)
 }
 
 export function setAudioEnabled(audioEnabled) {
@@ -65,10 +71,6 @@ export function setVideoEnabled(videoEnabled) {
 
 export function sendMuteAll(hostAvatar) {
 	socket.emit("mute-all", hostAvatar)
-}
-
-export function onMuteAll(hostAvatar) {
-	socket.on("mute-all", hostAvatar)
 }
 
 // Extra client-side socket connection events
