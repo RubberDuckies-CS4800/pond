@@ -1,5 +1,6 @@
 <template>
 	<div class="host">
+		<HomeGraphics class="graphics" />
 		<div class="meeting_code_vertical_wrapper">
 			<h2>Meeting Code:</h2>
 			<h1 id="copy_meeting">{{ roomId }}</h1>
@@ -28,7 +29,11 @@
 </template>
 <script>
 import { switchRoom } from "@/backend/peers";
+import HomeGraphics from "@/components/HomeGraphics.vue";
 export default {
+	components: {
+		HomeGraphics
+	},
 	data() {
 		return {
 			checkName: true,
@@ -75,6 +80,14 @@ export default {
 };
 </script>
 <style scoped>
+.graphics {
+  position: fixed;
+}
+
+.host {
+  display: grid;
+  text-align: center;
+}
 .meeting_code_vertical_wrapper {
 	margin: 0;
 	position: absolute;
@@ -88,6 +101,8 @@ export default {
 	justify-content: center;
 	top: 60%;
 	position: absolute;
+	padding-top: 20px;
+
 }
 
 #copy_meeting_id_btn {
@@ -109,7 +124,11 @@ h1 {
 	padding: 10%;
 }
 
+#join_meeting_host_btn {
+	background-color: #FAD423;
+}
+
 .v-input {
-	width: 30%;
+	width: 225px;
 }
 </style>

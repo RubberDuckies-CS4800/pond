@@ -28,6 +28,11 @@ const routes = [
     name: 'Host',
     component: () => import('../views/Host.vue')
   },
+  {
+    path: '*',
+    name: 'Not Found',
+    component: () => import('../views/404notfound.vue')
+  },
 ]
 
 const router = new VueRouter({
