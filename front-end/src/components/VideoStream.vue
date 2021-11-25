@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<video ref="video" :muted="muted" :volume="volume" />
+		<video ref="video" :muted="muted"/>
 	</div>
 </template>
 
