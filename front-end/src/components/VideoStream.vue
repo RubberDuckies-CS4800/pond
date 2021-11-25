@@ -33,6 +33,15 @@ export default {
       if (this.isMounted)
         window.requestAnimationFrame(() => this.updateMeter());
     },
+    updateVolume() {
+      const vid = this.$refs.video;
+      vid.volume = this.volume;
+    }
+	},
+  watch: {
+    volume: function() {
+      this.updateVolume();
+    }
   },
   mounted() {
     this.isMounted = true;
