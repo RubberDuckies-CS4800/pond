@@ -53,7 +53,6 @@ export default {
     },
     joinRoom() {
         this.$router.push('/meeting');
-        console.log(this.code, this.name)
         switchRoom(this.code, this.name, false);
     },
     validateName() {
