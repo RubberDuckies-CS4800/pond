@@ -1,9 +1,8 @@
 <template>
 	<div class="wrapper">
-		<!-- <h1>{{ avatars }}</h1> -->
 		<MeetingGraphics class="graphics" />
 		<h1>Meeting Room {{ roomId }} </h1>
-		<p>{{ streams.length }} users are connected</p>
+		<!-- <p>{{ streams.length }} users are connected</p> -->
 		<p v-if="!myStreamIsOk">
 			You have not given Pond permission to use your microphone or webcam
 		</p>
