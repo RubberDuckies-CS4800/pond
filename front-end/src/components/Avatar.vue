@@ -149,8 +149,6 @@ export default {
 			let period = (2 * Math.PI) / Math.abs(dropoffFactor);
 			let x_intercept = radius + period / 4;
 			let scale;
-			console.log(`distance: ${distance}`);
-			console.log(`radius: ${radius}`);
 			if (distance <= radius) {
 				scale = 1;
 			} else if (radius < distance && distance < x_intercept) {
