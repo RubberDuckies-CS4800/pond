@@ -5,6 +5,7 @@
 			:key="avatar.id"
 			:avatar="avatar"
 			:isHost="isHost"
+			:myAvatar="myAvatar"
 		/>
 	</div>
 </template>
