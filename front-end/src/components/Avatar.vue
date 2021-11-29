@@ -70,7 +70,6 @@ export default {
 			color: { r: 93, g: 111, b: 199 },
 			radius: 2.5,
 			dropoffFactor: 0.4,
-			throttleTime: 10, // in milliseconds
 		};
 	},
 	created() {
@@ -211,7 +210,7 @@ export default {
 				left: p.x,
 				top: p.y,
 			});
-		}, this.throttleTime),
+		}, 10), // in milliseconds
 		onMouseUp() {
 			document.onmouseup = null;
 			document.onmousemove = null;
