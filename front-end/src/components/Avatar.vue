@@ -48,6 +48,7 @@ import AvatarInside from "@/components/AvatarInside";
 import AvatarMenu from "@/components/AvatarMenu";
 import { state } from "@/backend/peers";
 import { updateAvatar } from "@/backend/socket";
+import _ from "lodash";
 
 export default {
 	components: {
@@ -105,7 +106,6 @@ export default {
 				return 0;
 			}
 			if (this.avatar && this.myAvatar) {
-
 				return (
 					(this.volume / 100) *
 					this.calcScale(
@@ -140,7 +140,8 @@ export default {
 			// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 			let distance = Math.sqrt(
-				Math.pow(userA.left - userB.left, 2) + Math.pow(userA.top - userB.top, 2)
+				Math.pow(userA.left - userB.left, 2) +
+					Math.pow(userA.top - userB.top, 2)
 			);
 			let period = (2 * Math.PI) / Math.abs(dropoffFactor);
 			let x_intercept = radius + period / 4;
@@ -201,11 +202,16 @@ export default {
 				y: e.clientY - this.dragOffsetY,
 			};
 			p = this.mouseToCanvasPosition(p);
+
+			// limit this to be called only after 50ms has passed since the last call
+			this.updateAvatarThrottle(p);
+		},
+		updateAvatarThrottle: _.throttle((p) => {
 			updateAvatar({
 				left: p.x,
 				top: p.y,
 			});
-		},
+		}, 10),
 		onMouseUp() {
 			document.onmouseup = null;
 			document.onmousemove = null;
