@@ -105,19 +105,12 @@ export default {
 				return 0;
 			}
 			if (this.avatar && this.myAvatar) {
-				let myAvatarPos = {
-					x: this.myAvatar.left,
-					y: this.myAvatar.top,
-				};
-				let otherAvatarPos = {
-					x: this.avatar.left,
-					y: this.avatar.top,
-				};
+
 				return (
 					(this.volume / 100) *
 					this.calcScale(
-						myAvatarPos,
-						otherAvatarPos,
+						this.avatar,
+						this.myAvatar,
 						this.radius,
 						this.dropoffFactor
 					)
@@ -147,7 +140,7 @@ export default {
 			// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 			let distance = Math.sqrt(
-				Math.pow(userA.x - userB.x, 2) + Math.pow(userA.y - userB.y, 2)
+				Math.pow(userA.left - userB.left, 2) + Math.pow(userA.top - userB.top, 2)
 			);
 			let period = (2 * Math.PI) / Math.abs(dropoffFactor);
 			let x_intercept = radius + period / 4;
