@@ -101,6 +101,9 @@ export default {
 			});
 		},
 		scaledVolume() {
+			if (this.isMyAvatar) {
+				return 0;
+			}
 			if (this.avatar && this.myAvatar) {
 				let myAvatarPos = {
 					x: this.myAvatar.left,
