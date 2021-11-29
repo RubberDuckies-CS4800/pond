@@ -70,6 +70,7 @@ export default {
 			color: { r: 93, g: 111, b: 199 },
 			radius: 2.5,
 			dropoffFactor: 0.4,
+			throttleTime: 10, // in milliseconds
 		};
 	},
 	created() {
@@ -203,7 +204,6 @@ export default {
 			};
 			p = this.mouseToCanvasPosition(p);
 
-			// limit this to be called only after 50ms has passed since the last call
 			this.updateAvatarThrottle(p);
 		},
 		updateAvatarThrottle: _.throttle((p) => {
@@ -211,7 +211,7 @@ export default {
 				left: p.x,
 				top: p.y,
 			});
-		}, 10),
+		}, this.throttleTime),
 		onMouseUp() {
 			document.onmouseup = null;
 			document.onmousemove = null;
