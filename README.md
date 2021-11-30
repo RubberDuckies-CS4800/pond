@@ -38,3 +38,10 @@ Ctrl + C
 ```
 
 
+## Windows Setup and Run
+1. Go into `windows-batch-files`.
+2. Run `setup_front-end.bat` and `setup_back-end.bat`
+3. Run `run_front-end.bat` and `run_back-end.bat`
+
+
+
