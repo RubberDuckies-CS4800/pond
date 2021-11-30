@@ -1,6 +1,6 @@
 # pond
 
-## Back-end setup
+## Back-End setup
 ```
 npm install
 ```
