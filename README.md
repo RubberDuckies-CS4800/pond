@@ -1,8 +1,9 @@
 # pond
 A interactive and collaborative teleconferencing web application live at https://pond.blue/
 
-## Front-End Project Setup
+## Front-End Setup
 ```
+cd front-end
 npm install
 ```
 
@@ -18,3 +19,22 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## Back-End setup
+```
+cd back-end
+npm install
+```
+
+### Start server and automatically restarts with saved changes
+```
+nodemon server
+```
+
+### Stop nodemon
+```
+Ctrl + C
+```
+
+
