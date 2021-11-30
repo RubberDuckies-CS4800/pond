@@ -2,8 +2,13 @@
 A interactive and collaborative teleconferencing web application live at https://pond.blue/
 
 ## Front-End Setup
+### Go into the front-end folder
 ```
 cd front-end
+```
+
+### Set up dependencies 
+```
 npm install
 ```
 
@@ -12,18 +17,15 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
 
 ## Back-End setup
+### Go into the back-end folder
 ```
 cd back-end
+```
+
+### Set up dependencies 
+```
 npm install
 ```
 
