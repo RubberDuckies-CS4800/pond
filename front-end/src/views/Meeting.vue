@@ -1,7 +1,7 @@
 <template>
 	<div class="wrapper">
 		<MeetingGraphics class="graphics" />
-		<h1>Meeting Room {{ roomId }} </h1>
+		<h1>Meeting Room {{ roomId }}</h1>
 		<!-- <p>{{ streams.length }} users are connected</p> -->
 		<p v-if="!myStreamIsOk">
 			You have not given Pond permission to use your microphone or webcam
@@ -16,10 +16,7 @@
 			:isHost="isHost"
 		/>
 
-		<UserControls
-			:hasMicrophone="hasMicrophone"
-			:hasCamera="hasCamera"
-		/>
+		<UserControls :hasMicrophone="hasMicrophone" :hasCamera="hasCamera" />
 
 		<MuteAll :myAvatar="myAvatar" :isHost="isHost" />
 	</div>
@@ -35,6 +32,7 @@ import {
 	sendLeaveRoom,
 	handlers,
 	requestAvatars,
+	onKickUser,
 } from "@/backend/socket";
 import MuteAll from "@/components/MuteAll.vue";
 
@@ -44,7 +42,7 @@ export default {
 		Avatars,
 		UserControls,
 		MuteAll,
-		MeetingGraphics
+		MeetingGraphics,
 	},
 	data() {
 		return {
@@ -99,6 +97,13 @@ export default {
 		};
 
 		requestAvatars();
+
+		onKickUser((id) => {
+			console.log("kick received");
+			if (this.myAvatar.id == id) {
+				this.$router.push("/");
+			}
+		});
 	},
 	beforeDestroy() {
 		sendLeaveRoom();
@@ -107,19 +112,19 @@ export default {
 </script>
 <style scoped>
 .graphics {
-  position: fixed;
+	position: fixed;
 }
 
 .wrapper {
-  display: grid;
-  text-align: center;
+	display: grid;
+	text-align: center;
 }
 
-.wrapper:not(.graphics){
-    z-index: 10;
+.wrapper:not(.graphics) {
+	z-index: 10;
 }
 
-h1{
+h1 {
 	z-index: 10;
 }
 

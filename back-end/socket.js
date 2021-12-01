@@ -74,8 +74,10 @@ function handleConnection(socket) {
 
 	socket.on("delete-whiteboard-figure", (id) => {
 		if (currentRoom) {
-			currentRoom.figures = currentRoom.figures.filter((x) => x.id !== id);
-			socket.broadcast.to(currentRoom.id).emit("delete-whiteboard-figure", id)
+			currentRoom.figures = currentRoom.figures.filter((x) => x.id !== id)
+			socket.broadcast
+				.to(currentRoom.id)
+				.emit("delete-whiteboard-figure", id)
 		}
 	})
 
@@ -114,6 +116,10 @@ function handleConnection(socket) {
 			}
 		}
 		socket.broadcast.to(currentRoom.id).emit("mute-all", hostAvatar)
+	})
+
+	socket.on("kick-user", (id) => {
+		socket.broadcast.to(currentRoom.id).emit("kick-user", id)
 	})
 }
 

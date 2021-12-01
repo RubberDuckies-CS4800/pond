@@ -73,6 +73,14 @@ export function sendMuteAll(hostAvatar) {
 	socket.emit("mute-all", hostAvatar)
 }
 
+export function sendKickUser(id) {
+	socket.emit("kick-user", id)
+}
+
+export function onKickUser(id) {
+	socket.on("kick-user", id)
+}
+
 // Extra client-side socket connection events
 socket.on("connect", () => {
 	console.log(`Socket Connected: ${socket.connected}`) // true

@@ -33,6 +33,7 @@
 			<AvatarMenu
 				:name="avatar.name"
 				:initials="initials"
+				:id="avatar.id"
 				:color="color"
 				:isMyAvatar="isMyAvatar"
 				:hostPrivilege="isHost"
