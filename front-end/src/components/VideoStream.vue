@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<video ref="video" style="height: 90px" :muted="muted"/>
+		<video ref="video" style="height: 95px" :muted="muted"/>
 	</div>
 </template>
 
